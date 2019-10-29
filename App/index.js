@@ -17,6 +17,10 @@ import AppContainer from './Navigator'
 
 const store = configStore()
 
+import BleModule from './Bluetooth/BleModule';
+
+global.BluetoothManager = new BleModule();
+
 export default class App extends React.Component {
   constructor(props) {
     super(props)

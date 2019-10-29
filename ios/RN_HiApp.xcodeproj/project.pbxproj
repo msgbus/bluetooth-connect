@@ -14,6 +14,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		14AEC5DC2366D06400914D41 /* main2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AEC5DB2366D06400914D41 /* main2.swift */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -55,6 +56,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RN_HiApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RN_HiApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RN_HiApp/main.m; sourceTree = "<group>"; };
+		14AEC5DA2366D06400914D41 /* RN_HiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RN_HiApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		14AEC5DB2366D06400914D41 /* main2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main2.swift; sourceTree = "<group>"; };
 		175EC507CBDC99A686EF8717 /* Pods-RN_HiApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RN_HiApp.release.xcconfig"; path = "Target Support Files/Pods-RN_HiApp/Pods-RN_HiApp.release.xcconfig"; sourceTree = "<group>"; };
 		1B57BCF733730674EB380993 /* Pods-RN_HiApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RN_HiApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RN_HiApp-tvOS/Pods-RN_HiApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2707BC01A3B84C5CD070AFB4 /* Pods-RN_HiApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RN_HiApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RN_HiApp-tvOS/Pods-RN_HiApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -184,6 +187,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				14AEC5DB2366D06400914D41 /* main2.swift */,
 				796E6679233C93D40024AB73 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* RN_HiApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -191,6 +195,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				26B80C44E11AC2A1158549BC /* Pods */,
+				14AEC5DA2366D06400914D41 /* RN_HiApp-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = NZF49C8V6H;
+						LastSwiftMigration = 1100;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -595,6 +601,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14AEC5DC2366D06400914D41 /* main2.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -649,6 +656,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D481EBE2AECE651043CD26AE /* Pods-RN_HiAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = NZF49C8V6H;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -673,6 +681,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0E78EC781908D480D0A13DD9 /* Pods-RN_HiAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = NZF49C8V6H;
@@ -695,6 +704,7 @@
 			baseConfigurationReference = 00F05BE1622F2F53A98E076A /* Pods-RN_HiApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = NZF49C8V6H;
@@ -707,6 +717,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "me.dearb.RN-HiApp-0.6";
 				PRODUCT_NAME = RN_HiApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "RN_HiApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -716,6 +729,7 @@
 			baseConfigurationReference = 175EC507CBDC99A686EF8717 /* Pods-RN_HiApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NZF49C8V6H;
 				INFOPLIST_FILE = RN_HiApp/Info.plist;
@@ -727,6 +741,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "me.dearb.RN-HiApp-0.6";
 				PRODUCT_NAME = RN_HiApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "RN_HiApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

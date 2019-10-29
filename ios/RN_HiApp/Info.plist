@@ -57,6 +57,8 @@
 		<string>iconfont.ttf</string>
 		<string>FontAwesome.ttf</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

@@ -15,6 +15,7 @@ import LanguageScreen from '@Views/Language'
 import FeedbackScreen from '@Views/Feedback'
 import MessageScreen from '@Views/Message'
 import PostScreen from '@Views/Post'
+import BluetoothScreen from '../Bluetooth'
 
 import {
   View,
@@ -89,6 +90,7 @@ const AppStack = createStackNavigator({
   Feedback: { screen: FeedbackScreen },
   Message: { screen: MessageScreen },
   Post: { screen: PostScreen }
+  , Bluetooth: { screen: BluetoothScreen }
 }, {
   headerMode: 'none',
 })

@@ -6,7 +6,9 @@ import styles from '@Styles'
 import Icon from '@Components/Icon'
 import { View, StyleSheet } from 'react-native'
 import { ListItem } from 'react-native-elements'
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import req from '@Network'
+import BluetoothReq from '../../Bluetooth';
 
 @connect(state => ({
   user: state.app.user
@@ -84,6 +86,15 @@ export default class HomeScreen extends React.Component {
             </View>
           ))
         }
+        <View style={viewStyles.list}>
+          <ListItem
+            chevron
+            topDivider
+            bottomDivider
+            leftIcon={<AwesomeIcon name='bluetooth' style={{fontSize: 26, color: '#fc3'}}/>}
+            onPress={_ => { this.props.navigation.navigate('Bluetooth') }}
+            title='Add device 33'/>
+        </View>
       </View>
     )
   }
