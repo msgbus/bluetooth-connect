@@ -48,6 +48,14 @@ export default class HomeScreen extends React.Component {
         onPress() {
           this.props.navigation.navigate('About')
         }
+      },
+      {
+        title: t('settings.bluetooth'),
+        icon: 'ios7chatbubbleoutline',
+        color: '#09f',
+        onPress() {
+          this.props.navigation.navigate('Bluetooth')
+        }
       }
     ]
   }
@@ -86,15 +94,6 @@ export default class HomeScreen extends React.Component {
             </View>
           ))
         }
-        <View style={viewStyles.list}>
-          <ListItem
-            chevron
-            topDivider
-            bottomDivider
-            leftIcon={<AwesomeIcon name='bluetooth' style={{fontSize: 26, color: '#fc3'}}/>}
-            onPress={_ => { this.props.navigation.navigate('Bluetooth') }}
-            title='Add device 33'/>
-        </View>
       </View>
     )
   }
