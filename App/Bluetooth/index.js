@@ -225,14 +225,7 @@ export default class App extends Component {
 
     renderHeader=()=>{
         return(
-            <View style={styles.container}>
-                <Header
-                  leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => { this.props.navigation.goBack() } }/>}
-                  centerComponent={{ text: "Add device", style: styles1.modalHeader.center }}
-                  containerStyle={{
-                    backgroundColor: config.mainColor,
-                  }}
-                />
+            <View style={styles.container}>        
                 <View style={{marginTop:20}}>
                     <TouchableOpacity 
                         activeOpacity={0.7}
@@ -330,6 +323,13 @@ export default class App extends Component {
     render () {
         return (
             <View style={styles.container}>  
+                <Header
+                    leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => { this.props.navigation.goBack() } }/>}
+                    centerComponent={{ text: "Add device", style: styles1.modalHeader.center }}
+                    containerStyle={{
+                    backgroundColor: config.mainColor,
+                    }}
+                />
                 <FlatList 
                     renderItem={this.renderItem}
                     keyExtractor={item=>item.id}
