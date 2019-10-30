@@ -32,6 +32,7 @@
     "female": "female",
     "needRestartTip": "The language setting will take effect after app is restarted",
     "feedbackPlaceholder": "Hi, any suggestion to tell us?",
-    "feedbackSuccess": "Thanks for your feedback"
+    "feedbackSuccess": "Thanks for your feedback",
+    "addDevice": "Add device",
   }
 }

@@ -93,7 +93,7 @@ export default class HomeScreen extends React.Component {
             bottomDivider
             leftIcon={<AwesomeIcon name='bluetooth' style={{fontSize: 26, color: '#fc3'}}/>}
             onPress={_ => { this.props.navigation.navigate('Bluetooth') }}
-            title='Add device 33'/>
+            title={t('settings.addDevice')}/>
         </View>
       </View>
     )
