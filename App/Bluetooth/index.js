@@ -11,6 +11,7 @@ import {
   Alert,
   AppRegistry
 } from 'react-native';
+import BleModule from './BleModule';
 
 export default class App extends Component {
     constructor(props) {
@@ -27,6 +28,8 @@ export default class App extends Component {
         }
         this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
         this.deviceMap = new Map();
+
+        global.BluetoothManager = new BleModule();
     }
 
     componentDidMount(){
@@ -343,7 +346,7 @@ const styles = StyleSheet.create({
     },
     buttonView:{
         height:30,
-        backgroundColor:'rgb(33, 150, 243)',
+        backgroundColor:'#fc3',
         paddingHorizontal:10,
         borderRadius:5,
         justifyContent:"center",   
