@@ -12,6 +12,13 @@ import {
   AppRegistry
 } from 'react-native';
 import BleModule from './BleModule';
+import HeaderButton from '@Components/HeaderButton'
+import {
+  Header
+} from 'react-native-elements'
+import t from '@Localize'
+import styles1 from '@Styles'
+import config from '@Config'
 
 export default class App extends Component {
     constructor(props) {
@@ -220,17 +227,26 @@ export default class App extends Component {
 
     renderHeader=()=>{
         return(
-            <View style={{marginTop:20}}>
-                <TouchableOpacity 
-                    activeOpacity={0.7}
-                    style={[styles.buttonView,{marginHorizontal:10,height:40,alignItems:'center'}]}
-                    onPress={this.state.isConnected?this.disconnect.bind(this):this.scan.bind(this)}>
-                    <Text style={styles.buttonText}>{this.state.scaning?'正在搜索中':this.state.isConnected?'断开蓝牙':'搜索蓝牙'}</Text>
-                </TouchableOpacity>
-                
-                <Text style={{marginLeft:10,marginTop:10}}>
-                    {this.state.isConnected?'当前连接的设备':'可用设备'}
-                </Text>
+            <View style={styles.container}>
+                <Header
+                  leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => { this.props.navigation.goBack() } }/>}
+                  centerComponent={{ text: "Add device", style: styles1.modalHeader.center }}
+                  containerStyle={{
+                    backgroundColor: config.mainColor,
+                  }}
+                />
+                <View style={{marginTop:20}}>
+                    <TouchableOpacity 
+                        activeOpacity={0.7}
+                        style={[styles.buttonView,{marginHorizontal:10,height:40,alignItems:'center'}]}
+                        onPress={this.state.isConnected?this.disconnect.bind(this):this.scan.bind(this)}>
+                        <Text style={styles.buttonText}>{this.state.scaning?'正在搜索中':this.state.isConnected?'断开蓝牙':'搜索蓝牙'}</Text>
+                    </TouchableOpacity>
+                    
+                    <Text style={{marginLeft:10,marginTop:10}}>
+                        {this.state.isConnected?'当前连接的设备':'可用设备'}
+                    </Text>
+                </View>
             </View>
         )
     }
@@ -346,7 +362,7 @@ const styles = StyleSheet.create({
     },
     buttonView:{
         height:30,
-        backgroundColor:'#fc3',
+        backgroundColor: config.mainColor,
         paddingHorizontal:10,
         borderRadius:5,
         justifyContent:"center",   
