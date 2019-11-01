@@ -48,14 +48,14 @@ export default class HomeScreen extends React.Component {
         onPress() {
           this.props.navigation.navigate('About')
         }
-      },
-      {
-        title: t('settings.bluetooth'),
-        icon: 'ios7chatbubbleoutline',
-        color: '#09f',
-        onPress() {
-          this.props.navigation.navigate('Bluetooth')
-        }
+      // },
+      // {
+      //   title: t('settings.bluetooth'),
+      //   icon: 'ios7chatbubbleoutline',
+      //   color: '#09f',
+      //   onPress() {
+      //     this.props.navigation.navigate('Bluetooth')
+      //   }
       }
     ]
   }
