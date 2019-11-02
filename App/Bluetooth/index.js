@@ -9,7 +9,8 @@ import {
   TextInput,
   Platform,
   Alert,
-  AppRegistry
+  AppRegistry,
+  Button
 } from 'react-native';
 import BleModule from './BleModule';
 import HeaderButton from '@Components/HeaderButton'
@@ -19,6 +20,8 @@ import {
 import t from '@Localize'
 import styles1 from '@Styles'
 import config from '@Config'
+import {decode as atob, encode as btoa} from 'base-64'
+import {Buffer} from "buffer";
 
 export default class App extends Component {
     constructor(props) {
@@ -31,7 +34,9 @@ export default class App extends Component {
             receiveData:'',
             readData:'',
             data:[],
-            isMonitoring:false
+            isMonitoring:false,
+            battery:"",
+            version:""
         }
         this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
         this.deviceMap = new Map();
@@ -108,6 +113,7 @@ export default class App extends Component {
                 newData[item.index].isConnecting = false;
                 this.setState({data:[newData[item.index]], isConnected:true});
                 this.onDisconnect();
+                this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
             })
             .catch(err=>{
                 newData[item.index].isConnecting = false;
@@ -126,12 +132,12 @@ export default class App extends Component {
             })       
     }
 
-    write=(index,type)=>{
-        if(this.state.text.length == 0){
-            this.alert('请输入消息');
-            return;
-        }
-        BluetoothManager.write(this.state.text,index,type)
+    write=(bytes)=>{
+        // if(this.state.text.length == 0){
+        //     this.alert('请输入消息');
+        //     return;
+        // }
+        BluetoothManager.write(bytes)
             .then(characteristic=>{
                 this.bluetoothReceiveData = [];
                 this.setState({
@@ -159,29 +165,74 @@ export default class App extends Component {
             })
             .catch(err=>{
 
-            })              
+            })
     }
 
     //监听蓝牙数据 
-    monitor=(index)=>{
+    monitor=(ServiceUUid,CharUUID)=>{
         let transactionId = 'monitor';
+        console.log("monitor:",ServiceUUid,CharUUID);
         this.monitorListener = BluetoothManager.manager.monitorCharacteristicForDevice(BluetoothManager.peripheralId,
-            BluetoothManager.nofityServiceUUID[index],BluetoothManager.nofityCharacteristicUUID[index],
+            ServiceUUid,CharUUID,
             (error, characteristic) => {
                 if (error) {
                     this.setState({isMonitoring:false});
-                    console.log('monitor fail:',error);    
-                    this.alert('monitor fail: ' + error.reason);      
+                    console.log('monitor fail:',error);
+                    this.alert('monitor fail: ' + error.reason);
                 }else{
                     this.setState({isMonitoring:true});
                     this.bluetoothReceiveData.push(characteristic.value); //数据量多的话会分多次接收
-                    this.setState({receiveData:this.bluetoothReceiveData.join('')})
+                    this.setState({receiveData:this.bluetoothReceiveData.join('')});
                     console.log('monitor success',characteristic.value);
-                    // this.alert('开启成功'); 
-                }
+                    var bytebuf = this.base64ToArrayBuffer(characteristic.value);
+                    if(bytebuf.length>=6)
+                    {
+                        if(bytebuf[0] == 106 && bytebuf[1] == 2){
+                            this.getBattery(bytebuf)
+                        }
+                        if(bytebuf[0] == 201 && bytebuf[1] == 2){
+                            this.getVersion(bytebuf)
+                        }
+                        if(bytebuf[0] == 200 && bytebuf[1] == 2){
+                            this.setBroadcastNameResp(bytebuf)
+                        }
+                    }
 
-            }, transactionId)
-    }  
+                }
+            }, transactionId);
+    }
+
+    getBattery(bytesbuf){
+        if(bytesbuf.length == 10 && bytesbuf[0] == 106 && bytesbuf[1] == 2){
+            if (bytesbuf[4] == 4){
+                this.setState({battery:String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%   "+String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%"})
+            }
+        }
+    }
+
+    getVersion(bytesbuf){
+        if(bytesbuf.length == 14 && bytesbuf[0] == 201 && bytesbuf[1] == 2){
+            if (bytesbuf[4] == 8){
+                this.setState({version:"主: ["+bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6]+"]"+"   "
+                                +"副: ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"})
+            }
+        }
+    }
+
+    setBroadcastNameResp(bytesbug){
+
+    }
+
+    base64ToArrayBuffer(base64) {
+        var binary_string = atob(base64);
+        var len = binary_string.length;
+        var bytes = new Uint8Array(len);
+        for (var i = 0; i < len; i++) {
+            bytes[i] = binary_string.charCodeAt(i);
+            console.log(bytes[i]);
+        }
+        return bytes;
+    }
 
     //监听蓝牙断开 
     onDisconnect(){        
@@ -249,19 +300,71 @@ export default class App extends Component {
             <View style={{marginBottom:30}}>
                 {this.state.isConnected?
                 <View>
-                    {this.renderWriteView('写数据(write)：','发送',
-                            BluetoothManager.writeWithResponseCharacteristicUUID,this.write)}
-                    {this.renderWriteView('写数据(writeWithoutResponse)：','发送',
-                            BluetoothManager.writeWithoutResponseCharacteristicUUID,this.writeWithoutResponse,)}
-                    {this.renderReceiveView('读取的数据：','读取',
-                            BluetoothManager.readCharacteristicUUID,this.read,this.state.readData)}
-                    {this.renderReceiveView(`监听接收的数据：${this.state.isMonitoring?'监听已开启':'监听未开启'}`,'开启监听',
-                            BluetoothManager.nofityCharacteristicUUID,this.monitor,this.state.receiveData)}
-                </View>                   
+                    {/*{this.renderWriteView('写数据(write)：','发送',*/}
+                            {/*BluetoothManager.writeWithResponseCharacteristicUUID,this.write)}*/}
+                    {/*{this.renderWriteView('写数据(writeWithoutResponse)：','发送',*/}
+                            {/*BluetoothManager.writeWithoutResponseCharacteristicUUID,this.writeWithoutResponse,)}*/}
+                    {/*{this.renderReceiveView('读取的数据：','读取',*/}
+                            {/*BluetoothManager.readCharacteristicUUID,this.read,this.state.readData)}*/}
+                    {/*{this.renderReceiveView(`监听接收的数据：${this.state.isMonitoring?'监听已开启':'监听未开启'}`,'开启监听',*/}
+                            {/*BluetoothManager.nofityCharacteristicUUID,this.monitor,this.state.receiveData)}*/}
+                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
+                        <View style={{flex: 2}}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={[styles.buttonView,{height:30,alignItems:'center'}]}
+                                onPress={() => {
+                                    this.checkBattery();
+                                }
+                                }>
+                                <Text style={styles.buttonText}>{"查询电量"}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 3, height:30,alignItems:"center", justifyContent:"center", marginTop:10}}>
+                            <Text>{this.state.battery}</Text>
+                        </View>
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
+                        <View style={{flex: 2}}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={[styles.buttonView,{height:30,alignItems:'center'}]}
+                                onPress={() => {
+                                    this.checkVersion();
+                                }
+                                }>
+                                <Text style={styles.buttonText}>{"查询版本"}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 3, height:30,alignItems:"center", justifyContent:"center", marginTop:10}}>
+                            <Text>{this.state.version}</Text>
+                        </View>
+                    </View>
+                </View>
                 :<View style={{marginBottom:20}}></View>
                 }        
             </View>
         )
+    }
+    checkBattery(){
+        // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
+        var bytes = new Array()
+        bytes.push(106);
+        bytes.push(1);
+        bytes.push(0);
+        bytes.push(0);
+        bytes.push(0);
+        BluetoothManager.write(bytes)
+    }
+    checkVersion(){
+        // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
+        var bytes = new Array()
+        bytes.push(201);
+        bytes.push(1);
+        bytes.push(0);
+        bytes.push(0);
+        bytes.push(0);
+        BluetoothManager.write(bytes)
     }
 
     renderWriteView=(label,buttonText,characteristics,onPress,state)=>{
