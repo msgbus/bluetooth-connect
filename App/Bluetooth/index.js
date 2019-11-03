@@ -17,7 +17,7 @@ import {
   Header
 } from 'react-native-elements'
 import t from '@Localize'
-import styles1 from '@Styles'
+import styles from '@Styles'
 import config from '@Config'
 
 export default class App extends Component {
@@ -46,8 +46,9 @@ export default class App extends Component {
             console.log("onStateChange: ", state);
             if(state == 'PoweredOn'){
                 this.scan();
-            }               
+            }
         })
+      this.scan()
     }     
 
     componentWillUnmount() {
@@ -215,7 +216,7 @@ export default class App extends Component {
                 disabled={this.state.isConnected?true:false}
                 onPress={()=>{this.connect(item)}}
                 style={styles.item}>                         
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection:'row', marginTop: 10}}>
                     <Text style={{color:'black'}}>{data.name?data.name:''}</Text>
                     <Text style={{color:"red",marginLeft:50}}>{data.isConnecting?'连接中...':''}</Text>
                 </View>
@@ -231,8 +232,8 @@ export default class App extends Component {
                 <View style={{marginTop:20}}>
                     <TouchableOpacity 
                         activeOpacity={0.7}
-                        style={[styles.buttonView,{marginHorizontal:10,height:40,alignItems:'center'}]}
-                        onPress={this.state.isConnected?this.disconnect.bind(this):this.scan.bind(this)}>
+                        style={styles.buttonView}
+                        onPress={this.state.isConnected ? this.disconnect.bind(this) : this.scan.bind(this)}>
                         <Text style={styles.buttonText}>{this.state.scaning?'正在搜索中':this.state.isConnected?'断开蓝牙':'搜索蓝牙'}</Text>
                     </TouchableOpacity>
                     
@@ -327,12 +328,12 @@ export default class App extends Component {
             <View style={styles.container}>  
                 <Header
                     leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => { this.props.navigation.goBack() } }/>}
-                    centerComponent={{ text: "Add device", style: styles1.modalHeader.center }}
+                    centerComponent={{ text: "Add device", style: styles.modalHeader.center }}
                     containerStyle={{
                     backgroundColor: config.mainColor,
                     }}
                 />
-                <FlatList 
+                <FlatList
                     renderItem={this.renderItem}
                     keyExtractor={item=>item.id}
                     data={this.state.data}
@@ -346,47 +347,8 @@ export default class App extends Component {
     }
 }
 
-const styles = StyleSheet.create({   
-    container: {
-        flex: 1,
-        backgroundColor:'white',
-        marginTop:Platform.OS == 'ios'?20:0,
-    },
-    item:{
-        flexDirection:'column',
-        borderColor:'rgb(235,235,235)',
-        borderStyle:'solid',
-        borderBottomWidth:StyleSheet.hairlineWidth,
-        paddingLeft:10,
-        paddingVertical:8,       
-    },
-    buttonView:{
-        height:30,
-        backgroundColor: config.mainColor,
-        paddingHorizontal:10,
-        borderRadius:5,
-        justifyContent:"center",   
-        alignItems:'center',
-        alignItems:'flex-start',
-        marginTop:10
-    },
-    buttonText:{
-        color:"white",
-        fontSize:12,
-    },
-    content:{        
-        marginTop:5,
-        marginBottom:15,        
-    },
-    textInput:{       
-		paddingLeft:5,
-		paddingRight:5,
-		backgroundColor:'white',
-		height:50,
-        fontSize:16,
-        flex:1,
-	},
+const viewStyles = StyleSheet.create({
+  container: {
+    ...styles.container,
+  },
 })
-
-
-
