@@ -4,6 +4,8 @@ import {
 } from 'react-native'
 import { BleManager } from 'react-native-ble-plx';
 import { Buffer } from 'buffer';
+import uuid from 'react-native-uuid';
+
 
 export default class BleModule{
     constructor(){
@@ -53,7 +55,7 @@ export default class BleModule{
         this.writeWithoutResponseServiceUUID = [];
         this.writeWithoutResponseCharacteristicUUID = [];
         this.nofityServiceUUID = [];
-        this.nofityCharacteristicUUID = [];  
+        this.nofityCharacteristicUUID = [];
     }
 
     //获取Notify、Read、Write、WriteWithoutResponse的serviceUUID和characteristicUUID
@@ -87,8 +89,8 @@ export default class BleModule{
                 if(charchteristic[j].isNotifiable){
                     this.nofityServiceUUID.push(services[i].uuid);
                     this.nofityCharacteristicUUID.push(charchteristic[j].uuid);     
-                }            
-            }                    
+                }
+            }
         }       
           
         console.log('readServiceUUID',this.readServiceUUID);
@@ -142,16 +144,36 @@ export default class BleModule{
                     console.log('connect success:',device.name,device.id);    
                     this.peripheralId = device.id;       
                     // resolve(device);
+                    console.log('device all',device);
                     return device.discoverAllServicesAndCharacteristics();
                 })
                 .then(device=>{
+                    console.log("connect device and send");
+                    // var bytesUuid = uuid.parse('00006666-0000-1000-8000-00805F9B34FB'); // -> <Buffer 79 7f f0 43 11 eb 11 e1 80 d6 51 09 98 75 5d 10>
+                    // console.log(uuid.unparse(bytesUuid));
+                    // var bytes = new Array()
+                    // bytes[0] = 106;
+                    // bytes[1] = 1;
+                    // bytes[2] = 0;
+                    // bytes[3] = 0;
+                    // bytes[4] = 0;
+                    // device.writeCharacteristicWithResponseForService(bytesUuid, bytesUuid, bytes)
+                    //     .then((characteristic) => {
+                    //         console.log("resp value:",characteristic.value);
+                    //         return
+                    //     })
+                    //     .catch( err1=>{
+                    //         console.log(err1)
+                    //         }
+                    //     )
                     return this.fetchServicesAndCharacteristicsForDevice(device)
                 })
                 .then(services=>{
-                    console.log('fetchServicesAndCharacteristicsForDevice',services);    
-                    this.isConnecting = false;
-                    this.getUUID(services);     
-                    resolve();                           
+                    console.log("connect services");
+                    console.log('fetchServicesAndCharacteristicsForDevice',services);
+                    // this.isConnecting = false;
+                    this.getUUID(services);
+                    resolve();
                 })
                 .catch(err=>{
                     this.isConnecting = false;
@@ -201,28 +223,40 @@ export default class BleModule{
     /**
      * 写数据 
      * */
-    write(value,index){
-        let formatValue;      
-        if(value === '0D0A') {  //直接发送小票打印机的结束标志
-            formatValue = value;
-        }else {  //发送内容，转换成base64编码
-            formatValue = new Buffer(value, "base64").toString('ascii'); 
-        }
+    write(bytes){
         let transactionId = 'write';
-        return new Promise( (resolve, reject) =>{      
-            this.manager.writeCharacteristicWithResponseForDevice(this.peripheralId,this.writeWithResponseServiceUUID[index], 
-                this.writeWithResponseCharacteristicUUID[index],formatValue,transactionId)
+        // var bytes = new Array()
+        // bytes.push(106);
+        // bytes.push(1);
+        // bytes.push(0);
+        // bytes.push(0);
+        // bytes.push(0);
+        // base64 bs = btoa(String.fromCharCode.apply(null, bytes));
+        console.log("base64:",Buffer.from(bytes).toString('base64'));
+        console.log("write:","66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777")
+        // return new Promise( (resolve, reject) =>{
+            this.manager.writeCharacteristicWithResponseForDevice(this.peripheralId,"66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777",Buffer.from(bytes).toString('base64'),transactionId)
                 .then(characteristic=>{                    
                     console.log('write success',value);
+                    console.log(characteristic.value)
                     resolve(characteristic);
                 },error=>{
                     console.log('write fail: ',error);
                     this.alert('write fail: ',error.reason);
                     reject(error);
                 })
-        });
+        // });
     }
 
+    // function _arrayBufferToBase64( buffer ) {
+    //     var binary = '';
+    //     var bytes = new Uint8Array( buffer );
+    //     var len = bytes.byteLength;
+    //     for (var i = 0; i < len; i++) {
+    //         binary += String.fromCharCode( bytes[ i ] );
+    //     }
+    //     return window.btoa( binary );
+    // }
      /**
      * 写数据 withoutResponse
      * */
@@ -234,7 +268,7 @@ export default class BleModule{
             formatValue = new Buffer(value, "base64").toString('ascii'); 
         }
         let transactionId = 'writeWithoutResponse';
-        return new Promise( (resolve, reject) =>{   
+        return new Promise( (resolve, reject) =>{
             this.manager.writeCharacteristicWithoutResponseForDevice(this.peripheralId, this.writeWithoutResponseServiceUUID[index], 
                 this.writeWithoutResponseCharacteristicUUID[index],formatValue,transactionId)
                 .then(characteristic=>{

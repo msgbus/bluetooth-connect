@@ -33,6 +33,7 @@
     "needRestartTip": "语言设置成功，重启应用后生效",
     "feedbackPlaceholder": "Hi, 有什么意见或建议要反馈给我们吗?",
     "feedbackSuccess": "谢谢您的反馈",
-    "bluetooth": "Add device"
+    "bluetooth": "Add device",
+    "addDevice": "Add device"
   }
 }
