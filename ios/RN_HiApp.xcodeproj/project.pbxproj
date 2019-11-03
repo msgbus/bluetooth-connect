@@ -703,7 +703,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 00F05BE1622F2F53A98E076A /* Pods-RN_HiApp.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -728,7 +728,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 175EC507CBDC99A686EF8717 /* Pods-RN_HiApp.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NZF49C8V6H;
