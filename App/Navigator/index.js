@@ -26,8 +26,8 @@ import {
 const HomeStack = createStackNavigator({
   Home: { screen: HomeScreen, }
 })
-const ContactsStack = createStackNavigator({
-  Contacts: { screen: ContactsScreen }
+const DevicesStack = createStackNavigator({
+  Devices: { screen: ContactsScreen }
 })
 const SettingsStack = createStackNavigator({
   Settings: { screen: SettingsScreen },
@@ -36,7 +36,7 @@ const SettingsStack = createStackNavigator({
 const TabNavigator = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
-    Contacts: { screen: ContactsStack },
+    Devices: { screen: DevicesStack },
     Settings: { screen: SettingsStack }
   },
   {
@@ -52,8 +52,8 @@ const TabNavigator = createBottomTabNavigator(
         switch (routeName) {
           case 'Home':
             return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text></View>
-          case 'Contacts':
-            return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.contacts')}</Text></View>
+          case 'Devices':
+            return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.devices')}</Text></View>
           case 'Settings':
             return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text></View>
         }
@@ -65,7 +65,7 @@ const TabNavigator = createBottomTabNavigator(
           case 'Home':
             iconName = `ios7home${focused ? '' : 'outline'}`
             break
-          case 'Contacts':
+          case 'Devices':
             iconName = `ios7chatbubble${focused ? '' : 'outline'}`
             break
           case 'Settings':
@@ -88,7 +88,7 @@ const AppStack = createStackNavigator({
   Profile: { screen: ProfileScreen },
   Language: { screen: LanguageScreen },
   Feedback: { screen: FeedbackScreen },
-  Message: { screen: MessageScreen },
+  Devices: { screen: MessageScreen },
   Post: { screen: PostScreen }
   , Bluetooth: { screen: BluetoothScreen }
 }, {

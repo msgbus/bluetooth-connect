@@ -2,6 +2,7 @@
   "global": {
     "home": "Home",
     "contacts": "Contacts",
+    "devices": "Devices",
     "message": "Message",
     "settings": "Settings",
     "about": "About",
