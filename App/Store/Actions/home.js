@@ -9,19 +9,13 @@ export const updatePost = createAction(types.UPDATE_POST)
 
 export function fetchTimeline() {
   return (dispatch) => {
-    return req.get('/timeline.json').then(res => {
-      const data = res.data
-      dispatch(initTimeline(data))
-    })
+    return new Promise(function(resolve, reject) { resolve(); })
   }
 }
 
 export function refreshTimeline() {
   return (dispatch) => {
-    return req.get('/refresh_timeline.json').then(res => {
-      const data = res.data
-      dispatch(prependTimeline(data))
-    })
+    return new Promise(function(resolve, reject) { resolve(); })
   }
 }
 

@@ -81,10 +81,8 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchContacts().then(_ => {
-      this.setState({
-        loading: false
-      })
+    this.setState({
+      loading: false
     })
   }
 

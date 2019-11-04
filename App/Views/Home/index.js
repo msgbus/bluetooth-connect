@@ -17,6 +17,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native'
+import TwsT1 from "../../Components/Tws"
 
 @connect(state => ({
   timeline: state.home.timeline
@@ -84,9 +85,7 @@ export default class HomeScreen extends React.Component {
 
   _renderItem({ item }) {
     return (
-      <TouchableOpacity activeOpacity={0.7} onPress={_ => { this.navToPost(item) }}>
-        <Post post={item}/>
-      </TouchableOpacity>
+      <TwsT1 post={item}/>
     )
   }
 
@@ -100,15 +99,12 @@ export default class HomeScreen extends React.Component {
         <FlatList
           contentContainerStyle={{ paddingBottom: 10 }}
           keyExtractor={this._keyExtractor}
-          data={this.props.timeline}
+          data={[{}]}
           renderItem={this._renderItem.bind(this)}
           onRefresh={this._onRefresh.bind(this)}
           onEndReached= {this._onEndReached.bind(this)}
           refreshing={this.state.refreshing}
         />
-        <Animated.View style={ { opacity: this.state.loadResultOpacity } }>
-          <Text style={viewStyles.loadResultContainer}>{ t('home.noMorePost') }</Text>
-        </Animated.View>
       </View>
     )
   }
@@ -128,37 +124,15 @@ export default class HomeScreen extends React.Component {
     this.setState({
       refreshing: true
     })
-    if (this.props.timeline[0].id >= 48) {
-      this._showLoadResultContainer()
+    this.props.refreshTimeline().then(_ => {
       this.setState({
         refreshing: false
       })
-    } else {
-      this.props.refreshTimeline().then(_ => {
-        this.setState({
-          refreshing: false
-        })
-      })
-    }
+    })
   }
 
   _onEndReached() {
     if (this.state.loading) return false
-    if (this.props.timeline[this.props.timeline.length - 1].id <= 24) {
-      this.setState({
-        loadedEnd: true
-      })
-      return false
-    } else {
-      this.setState({
-        loading: true
-      })
-      this.props.loadMoreTimeline().then(_ => {
-        this.setState({
-          loading: false
-        })
-      })
-    }
   }
 
   _showLoadResultContainer() {
