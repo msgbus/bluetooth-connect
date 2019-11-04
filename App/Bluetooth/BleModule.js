@@ -144,7 +144,7 @@ export default class BleModule{
                     console.log('connect success:',device.name,device.id);    
                     this.peripheralId = device.id;       
                     // resolve(device);
-                    console.log('device all',device);
+                    // console.log('device all',device);
                     return device.discoverAllServicesAndCharacteristics();
                 })
                 .then(device=>{
@@ -170,7 +170,7 @@ export default class BleModule{
                 })
                 .then(services=>{
                     console.log("connect services");
-                    console.log('fetchServicesAndCharacteristicsForDevice',services);
+                    // console.log('fetchServicesAndCharacteristicsForDevice',services);
                     // this.isConnecting = false;
                     this.getUUID(services);
                     resolve();

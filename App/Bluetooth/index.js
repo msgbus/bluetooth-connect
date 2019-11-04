@@ -46,7 +46,7 @@ export default class App extends Component {
 
     componentDidMount(){
         // 监听蓝牙开关
-        console.log(global.BluetoothManager)
+        // console.log(global.BluetoothManager)
         this.onStateChangeListener = global.BluetoothManager.manager.onStateChange((state) => {
             console.log("onStateChange: ", state);
             if(state == 'PoweredOn'){
@@ -90,7 +90,7 @@ export default class App extends Component {
                    BluetoothManager.stopScan();
                    this.setState({scaning:false});                   
                 }                
-            },1000)  //1秒后停止搜索
+            }, 5000)  //1秒后停止搜索
         }else {
             BluetoothManager.stopScan();
             this.setState({scaning:false});
@@ -313,7 +313,7 @@ export default class App extends Component {
                         <View style={{flex: 2}}>
                             <TouchableOpacity
                                 activeOpacity={0.7}
-                                style={[styles.buttonView,{height:30,alignItems:'center'}]}
+                                style={styles.buttonView}
                                 onPress={() => {
                                     this.checkBattery();
                                 }
@@ -329,7 +329,7 @@ export default class App extends Component {
                         <View style={{flex: 2}}>
                             <TouchableOpacity
                                 activeOpacity={0.7}
-                                style={[styles.buttonView,{height:30,alignItems:'center'}]}
+                                style={styles.buttonView}
                                 onPress={() => {
                                     this.checkVersion();
                                 }
