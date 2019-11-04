@@ -22,6 +22,7 @@ import styles1 from '@Styles'
 import config from '@Config'
 import {decode as atob, encode as btoa} from 'base-64'
 import {Buffer} from "buffer";
+import DialogInput from 'react-native-dialog-input';
 
 export default class App extends Component {
     constructor(props) {
@@ -36,7 +37,8 @@ export default class App extends Component {
             data:[],
             isMonitoring:false,
             battery:"",
-            version:""
+            version:"",
+            isDialogVisible: false,
         }
         this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
         this.deviceMap = new Map();
@@ -89,7 +91,7 @@ export default class App extends Component {
                    BluetoothManager.stopScan();
                    this.setState({scaning:false});                   
                 }                
-            },1000)  //1秒后停止搜索
+            },3000)  //1秒后停止搜索
         }else {
             BluetoothManager.stopScan();
             this.setState({scaning:false});
@@ -219,8 +221,14 @@ export default class App extends Component {
         }
     }
 
-    setBroadcastNameResp(bytesbug){
-
+    setBroadcastNameResp(bytesbuf){
+        if (bytesbuf.length == 6 && bytesbuf[0] == 200 && bytesbuf[1] == 2 ){
+            if (bytesbuf[3] == 0) {
+                this.alert("修改成功");
+            } else {
+                this.alert("修改失败");
+            }
+        }
     }
 
     base64ToArrayBuffer(base64) {
@@ -229,8 +237,8 @@ export default class App extends Component {
         var bytes = new Uint8Array(len);
         for (var i = 0; i < len; i++) {
             bytes[i] = binary_string.charCodeAt(i);
-            console.log(bytes[i]);
         }
+        console.log("monitor data:",bytes);
         return bytes;
     }
 
@@ -340,12 +348,72 @@ export default class App extends Component {
                             <Text>{this.state.version}</Text>
                         </View>
                     </View>
+                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={[styles.buttonView,{height:30,alignItems:'center'}]}
+                                onPress={() => {
+                                    this.setState({isDialogVisible: true});
+                                }
+                                }>
+                                <Text style={styles.buttonText}>{"修改蓝牙名称"}</Text>
+                                <DialogInput
+                                    isDialogVisible={this.state.isDialogVisible}
+                                    title={"修改蓝牙名称"}
+                                    message={"请输入你要修改的广播名"}
+                                    // hintInput ={this.state.data[1]}
+                                    cancelText={"取消"}
+                                    submitText={"确定"}
+                                    submitInput={ (inputText) => {this.changeBroatcastName(inputText);
+                                        this.setState({isDialogVisible: false}) }}
+                                    closeDialog={ () => {this.setState({isDialogVisible: false});
+                                    }}>
+                                </DialogInput>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
                 :<View style={{marginBottom:20}}></View>
                 }        
             </View>
         )
     }
+
+    changeBroatcastName(name) {
+        console.log("change name:",name)
+        var bytes = new Array()
+        bytes.push(200);
+        bytes.push(1);
+        bytes.push(0);
+
+        // var base64Name = btoa(name);
+        // console.log("base64 name",base64Name,base64Name.length);
+        var nameBytes = this.convertStringToByteArray(name)
+        console.log("bytes:", this.convertStringToByteArray(name),this.convertStringToByteArray(name).length);
+        bytes.push(nameBytes.length+1);
+        bytes.push(0);
+        for (var i = 0; i < nameBytes.length; i++) {
+            bytes.push(nameBytes[i]);
+        }
+        // bytes.push(nameBytes);
+        bytes.push(0);
+        console.log(bytes);
+        BluetoothManager.write(bytes)
+    }
+    convertStringToByteArray(str){
+        String.prototype.encodeHex = function () {
+            var bytes = [];
+            for (var i = 0; i < this.length; ++i) {
+                bytes.push(this.charCodeAt(i));
+            }
+            return bytes;
+        };
+
+        var byteArray = str.encodeHex();
+        return byteArray
+    }
+
     checkBattery(){
         // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
         var bytes = new Array()
