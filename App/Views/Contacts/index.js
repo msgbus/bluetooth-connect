@@ -141,20 +141,23 @@ export default class HomeScreen extends React.Component {
                     // disabled={this.state.isConnected?true:false}
                     onPress={()=>{this.setCurrentDevice(item)}}
                     style={[(item.index == this.state.currentDeviceIndex)?viewStyles.buttonView: viewStyles.otherButtonView,{flex:5}]}>
-                    <View style = {{flexDirection:'row',flex:7,height:80}}>
-                        <View style = {{flex:2,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textAlign:'center'}}>
-                            <Image
+                    <View style = {{flexDirection:'row',flex:1,height:80}}>
+                        {(this.state.devices[item.index].type == "Weport T1")?
+                            <View style = {{flex:2,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign:'center'}}>
+
+                                <Image
                                 source={T1_Icon}
                                 resizeMode={'cover'}
                                 style={{height:75,width:75,borderRadius:10}}
-                            />
-                        </View>
+                                />
+                            </View>:<View/>
+                        }
                         <View style = {{flex:5,paddingTop:10,paddingBottom:10}}>
                             <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1,fontWeight:'bold',fontSize:20}]}>{data.name}</Text>
-                            <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>
+                            {/*<Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>*/}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -309,7 +312,8 @@ const viewStyles = StyleSheet.create({
     itemFontView: {
         justifyContent: "center",
         alignItems: "center",
-        textAlign:'center'
+        textAlign:'center',
+        textAlignVertical: 'center'
     },
     addDeviceButtonView:{
         backgroundColor: 'transparent',
