@@ -23,6 +23,7 @@ import config from '@Config'
 import {decode as atob, encode as btoa} from 'base-64'
 import {Buffer} from "buffer";
 import DialogInput from 'react-native-dialog-input';
+import storage from '@Utils/storage'
 
 export default class App extends Component {
     constructor(props) {
@@ -39,6 +40,8 @@ export default class App extends Component {
             battery:"",
             version:"",
             isDialogVisible: false,
+            deviceName:"",
+            deviceId:""
         }
         this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
         this.deviceMap = new Map();
@@ -92,7 +95,7 @@ export default class App extends Component {
                    BluetoothManager.stopScan();
                    this.setState({scaning:false});                   
                 }                
-            }, 5000)  // 5秒后停止搜索
+            }, 2000)  // 5秒后停止搜索
         }else {
             BluetoothManager.stopScan();
             this.setState({scaning:false});
@@ -115,6 +118,7 @@ export default class App extends Component {
             .then(device=>{
                 newData[item.index].isConnecting = false;
                 this.setState({data:[newData[item.index]], isConnected:true});
+                this.setState({deviceName:item.item.name,deviceId:item.item.id});
                 this.onDisconnect();
                 this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
             })
@@ -275,12 +279,12 @@ export default class App extends Component {
                 disabled={this.state.isConnected?true:false}
                 onPress={()=>{this.connect(item)}}
                 style={styles.item}>                         
-                <View style={{flexDirection:'row', marginTop: 10}}>
+                <View style={{flexDirection:'row', marginTop: 10, marginLeft: 10}}>
                     <Text style={{color:'black'}}>{data.name?data.name:''}</Text>
                     <Text style={{color:"red",marginLeft:50}}>{data.isConnecting?'连接中...':''}</Text>
                 </View>
-                <Text>{data.id}</Text>
-               
+                <Text style={{marginLeft:10}}>{data.id}</Text>
+
             </TouchableOpacity>
         );
     }
@@ -329,7 +333,7 @@ export default class App extends Component {
                                 <Text style={styles.buttonText}>{"查询电量"}</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flex: 3, height:30,alignItems:"center", justifyContent:"center", marginTop:10}}>
+                        <View style={{flex: 3, alignItems:"center", justifyContent:"center", marginTop:10}}>
                             <Text>{this.state.battery}</Text>
                         </View>
                     </View>
@@ -345,7 +349,7 @@ export default class App extends Component {
                                 <Text style={styles.buttonText}>{"查询版本"}</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flex: 3, height:30,alignItems:"center", justifyContent:"center", marginTop:10}}>
+                        <View style={{flex: 3, alignItems:"center", justifyContent:"center", marginTop:10}}>
                             <Text>{this.state.version}</Text>
                         </View>
                     </View>
@@ -353,7 +357,7 @@ export default class App extends Component {
                         <View style={{flex: 1}}>
                             <TouchableOpacity
                                 activeOpacity={0.7}
-                                style={[styles.buttonView,{height:30,alignItems:'center'}]}
+                                style={styles.buttonView}
                                 onPress={() => {
                                     this.setState({isDialogVisible: true});
                                 }
@@ -374,6 +378,19 @@ export default class App extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={styles.buttonView}
+                                onPress={() => {
+                                    this.boundDevice();
+                                }
+                                }>
+                                <Text style={styles.buttonText}>{"绑定设备"}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
                 :<View style={{marginBottom:20}}></View>
                 }        
@@ -381,6 +398,21 @@ export default class App extends Component {
         )
     }
 
+    boundDevice = async () => {
+        // var deviceName = this.state.deviceName;
+        console.log("bound device:",this.state.deviceName,this.state.deviceId);
+
+        const deviceInfo = {
+            name: this.state.deviceName,
+            type: 'Weport T1',
+            deviceId: this.state.deviceId
+        };
+        storage.save("boundDevices",deviceInfo);
+
+        // let res = await storage.get("boundDevices");
+        // console.log("res:",res);
+
+    }
     changeBroatcastName(name) {
         console.log("change name:",name)
         var bytes = new Array()

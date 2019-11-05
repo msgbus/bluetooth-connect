@@ -121,12 +121,12 @@ export default class HomeScreen extends React.Component {
     //   {
     //     name: 'Weport T1',
     //     type: 'Weport T1',
-    //     uuid: 'uuid1'
+    //     deviceId: 'uuid1'
     //   },
     //   {
     //     name: 'Weport T2',
     //     type: 'Weport T2',
-    //     uuid: 'uuid2'
+    //     deviceId: 'uuid2'
     //   }
     // ]
     console.log('getBoundDevices', devices)

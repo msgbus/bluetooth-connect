@@ -7,6 +7,9 @@ import ListTitle from '@Components/ListTitle'
 import EmptyBox from '@Components/EmptyBox'
 import { fetchContacts } from '@Store/Actions'
 import { getRemoteAvatar } from '@Utils'
+import HeaderButton from '@Components/HeaderButton'
+import {Text,Button} from 'react-native'
+import storage from '@Utils/storage'
 
 import {
   View,
@@ -26,79 +29,86 @@ import {
 })
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = _ => {
-    return {
+  static navigationOptions = ({ navigation }) => {
+      const { params = {} } = navigation.state
+      const onPressRightButtonFunc = params.addDevice || function() {}
+
+      return {
       ...config.defaultNavigation,
       title: t('global.devices'),
+      headerRight: (
+          <HeaderButton
+              icon='ios7reload'
+              onPressButton={onPressRightButtonFunc }
+          />
+      )
     }
+  }
+
+  addDevice(){
+    // alert("add")
+      this.props.navigation.navigate('Bluetooth')
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      loading: true
+      loading: false
     }
   }
-
-  _renderItem({ item }) {
-    return (
-      <View>
-        <ListItem
-          chevron
-          bottomDivider
-          containerStyle={viewStyles.listItem}
-          subtitleStyle={viewStyles.subtitleStyle}
-          leftAvatar={{ source: { uri: getRemoteAvatar(item.avatar) } }}
-          title={item.nickname}
-          subtitle={item.location}
-          onPress={_ => { this.props.navigation.navigate('Message', { user: item }) }}
-        />
-      </View>
-    )
-  }
-
-  _renderListEmpty() {
-    if (this.state.loading) {
-      return (
-        <View style={viewStyles.loadingBox}>
-          <ActivityIndicator size="large"/>
-        </View>
-      )
-    }
-    return (
-      <EmptyBox style={{ height: 250 }}/>
-    )
-  }
-
-  _renderSectionHeader({ section: { title } }) {
-    return (
-      <ListTitle title={title}/>
-    )
-  }
-
-  _keyExtractor(item, index) {
-    return index.toString()
-  }
+  //
+  // _renderItem({ item }) {
+  //   return (
+  //     <View>
+  //       <ListItem
+  //         chevron
+  //         bottomDivider
+  //         containerStyle={viewStyles.listItem}
+  //         subtitleStyle={viewStyles.subtitleStyle}
+  //         leftAvatar={{ source: { uri: getRemoteAvatar(item.avatar) } }}
+  //         title={item.nickname}
+  //         subtitle={item.location}
+  //         onPress={_ => { this.props.navigation.navigate('Message', { user: item }) }}
+  //       />
+  //     </View>
+  //   )
+  // }
+  //
+  // _renderListEmpty() {
+  //   if (this.state.loading) {
+  //     return (
+  //       <View style={viewStyles.loadingBox}>
+  //         <ActivityIndicator size="large"/>
+  //       </View>
+  //     )
+  //   }
+  //   return (
+  //     <EmptyBox style={{ height: 250 }}/>
+  //   )
+  // }
+  //
+  // _renderSectionHeader({ section: { title } }) {
+  //   return (
+  //     <ListTitle title={title}/>
+  //   )
+  // }
+  //
+  // _keyExtractor(item, index) {
+  //   return index.toString()
+  // }
 
   componentDidMount() {
-    this.props.fetchContacts().then(_ => {
       this.setState({
-        loading: false
+          loading: false
       })
-    })
+      this.props.navigation.setParams({ addDevice: () => this.addDevice() })
   }
 
   render() {
     return (
-      <SectionList
-        style={viewStyles.container}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        keyExtractor={this._keyExtractor}
-        sections={this.props.contacts}
-        renderItem={this._renderItem.bind(this)}
-        renderSectionHeader={this._renderSectionHeader.bind(this)}
-        ListEmptyComponent={this._renderListEmpty.bind(this)}
-      />
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+
+        </View>
     )
   }
 }
