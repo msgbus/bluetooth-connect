@@ -44,8 +44,9 @@ export default class HomeScreen extends React.Component {
       title: t('global.devices'),
       headerRight: (
           <HeaderButton
-              icon='ios7redooutline'
+              icon='ios-add'
               onPressButton={onPressRightButtonFunc }
+              customize={true}
           />
       )
     }
