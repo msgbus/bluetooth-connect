@@ -15,7 +15,9 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
+  RefreshControl
 } from 'react-native'
 import TwsT1 from "../../Components/Tws"
 import storage from '@Utils/storage'
@@ -52,7 +54,7 @@ export default class HomeScreen extends React.Component {
       loading: false,
       loadedEnd: false,
       loadResultOpacity: new Animated.Value(0),
-      devices: [],
+      device: "",
     }
     this.fadeInAnimated = Animated.timing(
       this.state.loadResultOpacity,
@@ -73,34 +75,64 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount () {
-    this._onRefresh()
+    // this._getDevice()
   }
 
-  _renderItem({ item }) {
-    console.log('render item', item)
-    if (item.type === 'Weport T1') {
-      return (<TwsT1 device={item}/>)
+  _renderItem(item) {
+    if (item.item) {
+      if (item.item.type === 'Weport T1') {
+        console.log('render item', item)
+        return (<TwsT1 device={item.item}/>)
+      }
     }
   }
 
   _keyExtractor(item, index) {
-    return item.id
+    return index
   }
 
   render() {
     return (
-      <View style={viewStyles.container}>
-        <FlatList
-          contentContainerStyle={{ paddingBottom: 10 }}
-          keyExtractor={this._keyExtractor}
-          data={this.state.devices}
-          renderItem={this._renderItem.bind(this)}
-          onRefresh={this._onRefresh.bind(this)}
-          onEndReached= {this._onEndReached.bind(this)}
-          refreshing={this.state.refreshing}
-        />
-      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+        style={viewStyles.container}>
+        { this._renderDevice() }
+      </ScrollView>
     )
+  }
+
+  onRefresh = () => {
+    this.setState({ refreshing: true });
+    // In actual case set refreshing to false when whatever is being refreshed is done!
+
+    console.log("onRefresh")
+
+    // this.setState({devcie: ""})
+    // this.setState({ device: this.state.device })
+
+    this._getDevice()
+
+    setTimeout(() => {
+      this.setState({ refreshing: false });
+    }, 2000);
+  };
+
+  _renderDevice () {
+    console.log("device", this.state.device)
+    if (this.state.device != "") {
+      return (
+        <TwsT1 device={this.state.device}/>
+      )
+    } else {
+      return (
+        <Text> add device please </Text>
+        )
+    }
   }
 
   openPublisher() {
@@ -110,19 +142,22 @@ export default class HomeScreen extends React.Component {
     })
   }
 
-  navToPost(item) {
-    this.props.navigation.navigate('Post', { mid: item.id })
-  }
-
-  _onRefresh() {
+  _getDevice() {
     this.setState({
       refreshing: true
     })
     storage.get("boundDevices").then(devices => {
-      this.setState({
-        refreshing: false,
-        devices: devices
-      })
+      console.log("boundDevices", devices)
+      if (devices.deviceArray.length > 0) {
+        this.setState({
+          refreshing: false,
+          device: devices.deviceArray[devices.currentIndex]
+        })
+      } else {
+        this.setState({
+          refreshing: false
+        })
+      }
     })
   }
 

@@ -7,7 +7,6 @@ import t from '@Localize'
 import ParsedText from 'react-native-parsed-text'
 import { getRemoteAvatar } from '@Utils'
 import { formatDistance } from 'date-fns'
-import WeportT1 from '../../Bluetooth/WeportT1'
 
 import {
   View,
@@ -49,6 +48,8 @@ export default class TwsT1 extends React.Component {
     global.BluetoothManager = new BleModule();
 
     const { device } = this.props
+
+    console.log('connect', device)
     this.connect(device)
   }
 
