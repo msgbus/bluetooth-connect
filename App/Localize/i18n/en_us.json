@@ -14,7 +14,9 @@
     "comment": "Comment",
     "like": "Like",
     "post": "Post",
-    "emptyBox": "Nothing here!!"
+    "emptyBox": "Nothing here!!",
+    "tips":"Tips",
+    "cancel":"Cancel"
   },
   "home": {
     "publisher": "Publisher",
@@ -34,6 +36,33 @@
     "needRestartTip": "The language setting will take effect after app is restarted",
     "feedbackPlaceholder": "Hi, any suggestion to tell us?",
     "feedbackSuccess": "Thanks for your feedback",
-    "addDevice": "Add device",
+    "addDevice": "Add device"
+  },
+  "contact":{
+    "deleteOrNot":"Whether to delete the device?",
+    "rmSuccess":"Delete Successed!",
+    "alreadyCurrentDevice":"The current device is already the default device!",
+    "setupCurrentDevice":"Whether to set the current device as the default device?",
+    "setupSuccess":"set Successed！"
+  },
+  "blueTooth": {
+    "title": "Add Device",
+    "openBt": "Please open your phone Bluetooth and search again!",
+    "modifySuccess": "modify Successed!",
+    "modifyFail": "modify Failed!",
+    "connecting": "Connecting",
+    "searching": "Searching",
+    "disconnectBt": "Disconnect",
+    "searchBt": "Search",
+    "currentDevice": "Current Device",
+    "availableDevice": "Available Devices",
+    "queryPower": "Query power",
+    "queryVersion": "Query version",
+    "modifyBtName": "Modify the Bluetooth Name",
+    "inputBtName": "Please enter the Bluetooth name you want to modify",
+    "boundDevice": "Bind this device",
+    "alreadyBoundDevice": "This device has been bound!",
+    "modifyDeviceNameSuccess": "The device name was successfully modified.",
+    "boundSuccess": "Bound successed!"
   }
 }
