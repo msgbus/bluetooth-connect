@@ -8,8 +8,9 @@ import EmptyBox from '@Components/EmptyBox'
 import { fetchContacts } from '@Store/Actions'
 import { getRemoteAvatar } from '@Utils'
 import HeaderButton from '@Components/HeaderButton'
-import {Text,Button} from 'react-native'
+import {Text,Button,Picker,FlatList} from 'react-native'
 import storage from '@Utils/storage'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import {
   View,
@@ -53,9 +54,16 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: false
+        loading: true,
+        currentDevice: '',
+        devices:[]
     }
   }
+
+    updateCurrentDevice = (deviceUUID) => {
+        console.log('current device', deviceUUID);
+        this.setState({ currentDevice: deviceUUID })
+    };
   //
   // _renderItem({ item }) {
   //   return (
@@ -99,19 +107,68 @@ export default class HomeScreen extends React.Component {
 
   componentDidMount() {
       this.setState({
-          loading: false
+          loading: true
       })
       this.props.navigation.setParams({ addDevice: () => this.addDevice() })
-
+  }
+  componentWillMount(){
+      this.getBoundDevices()
   }
 
   render() {
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-
+        <View style={viewStyles.container}>
+            {this.state.loading ?
+                <View style={viewStyles.loadingBox}>
+                    <ActivityIndicator size="large"/>
+                </View>:
+                <FlatList
+                    renderItem={this.deviceItems}
+                    keyExtractor={item=>item.name}
+                />
+            }
         </View>
     )
   }
+
+    deviceItems=(item)=> {
+        // const devices = this.getBoundDevices();
+        console.log("devices:",this.state.devices);
+        return this.state.devices.map((item, i) => (
+            <View style={viewStyles.list} key={i}>
+                <ListItem
+                    chevron
+                    topDivider
+                    bottomDivider
+                    title={item.name}
+                    // onPress={_ => { this.props.navigation.navigate('About') }}
+                    leftIcon={<AwesomeIcon name='bluetooth' style={{fontSize: 26, color: '#fc3'}}/>}
+                />
+            </View>
+        ))
+    }
+    async getBoundDevices() {
+        await storage.get('boundDevices').then(value=>{
+            this.setState({
+                loading: false
+            });
+            console.log("get bound value:",value);
+            this.state.devices = value;
+        });
+        // const devices = [
+        //   {
+        //     name: 'Weport T1',
+        //     type: 'Weport T1',
+        //     deviceId: 'uuid1'
+        //   },
+        //   {
+        //     name: 'Weport T2',
+        //     type: 'Weport T2',
+        //     deviceId: 'uuid2'
+        //   }
+        // ]
+        // return devices instanceof Array ? devices : [];
+    }
 }
 
 const viewStyles = StyleSheet.create({

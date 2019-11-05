@@ -402,11 +402,19 @@ export default class App extends Component {
         // var deviceName = this.state.deviceName;
         console.log("bound device:",this.state.deviceName,this.state.deviceId);
 
-        const deviceInfo = {
+        var deviceInfo = [{
             name: this.state.deviceName,
             type: 'Weport T1',
             deviceId: this.state.deviceId
+        }];
+        const deviceInfo2 = {
+            name: this.state.deviceName,
+            type: 'Weport T2',
+            deviceId: this.state.deviceId
         };
+        // var deviceInfoJson = JSON.stringify(deviceInfo);
+        deviceInfo.push(deviceInfo2);
+        console.log(deviceInfo);
         storage.save("boundDevices",deviceInfo);
 
         // let res = await storage.get("boundDevices");
