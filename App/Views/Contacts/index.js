@@ -8,7 +8,7 @@ import EmptyBox from '@Components/EmptyBox'
 import { fetchContacts } from '@Store/Actions'
 import { getRemoteAvatar } from '@Utils'
 import HeaderButton from '@Components/HeaderButton'
-import {Text,Button,Picker,FlatList} from 'react-native'
+import {Text,Button,Picker,FlatList,TouchableOpacity} from 'react-native'
 import storage from '@Utils/storage'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -125,27 +125,47 @@ export default class HomeScreen extends React.Component {
                 <FlatList
                     renderItem={this.deviceItems}
                     keyExtractor={item=>item.name}
+                    data={this.state.devices}
+                    ListFooterComponent={this.renderFooter}
                 />
             }
         </View>
     )
   }
 
-    deviceItems=(item)=> {
-        // const devices = this.getBoundDevices();
-        console.log("devices:",this.state.devices);
-        return this.state.devices.map((item, i) => (
-            <View style={viewStyles.list} key={i}>
-                <ListItem
-                    chevron
-                    topDivider
-                    bottomDivider
-                    title={item.name}
-                    // onPress={_ => { this.props.navigation.navigate('About') }}
-                    leftIcon={<AwesomeIcon name='bluetooth' style={{fontSize: 26, color: '#fc3'}}/>}
-                />
-            </View>
-        ))
+    renderFooter=()=>{
+      return (
+          <View style={{marginBottom:30}}>
+            <TouchableOpacity
+                activeOpacity={0.7}
+                // disabled={this.state.isConnected?true:false}
+                onPress={()=>{this.addDevice()}}
+                style={viewStyles.buttonView}>
+                <View style={{flexDirection:'row', marginLeft: 10,flex:1}}>
+                    <Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>
+                </View>
+            </TouchableOpacity>
+          </View>
+      )
+    }
+
+    deviceItems=(item)=>{
+        let data = item.item;
+        return(
+            <TouchableOpacity
+                activeOpacity={0.7}
+                disabled={this.state.isConnected?true:false}
+                onPress={()=>{this.connect(item)}}
+                style={styles.buttonView}>
+                <View style={{flexDirection:'row', marginLeft: 10,flex:1}}>
+                    <Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{data.name}</Text>
+                </View>
+                <View style={{flexDirection:'row',flex:1,marginTop:5}}>
+                    <Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center'}}>{"Type: "+data.type}</Text>
+                    <Text style={{flex:1,justifyContent: "center", alignItems: "center", textAlign:'center'}}>{"UUID: "+data.deviceId}</Text>
+                </View>
+            </TouchableOpacity>
+        );
     }
     async getBoundDevices() {
         await storage.get('boundDevices').then(value=>{
@@ -153,7 +173,8 @@ export default class HomeScreen extends React.Component {
                 loading: false
             });
             console.log("get bound value:",value);
-            this.state.devices = value;
+            this.setState({devices : value});
+            console.log("state devices:",this.state.devices)
         });
         // const devices = [
         //   {
@@ -187,5 +208,16 @@ const viewStyles = StyleSheet.create({
     height: 80,
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+    buttonView: {
+        marginRight:5,
+        marginLeft:5,
+        marginTop:10,
+        paddingTop:10,
+        paddingBottom:10,
+        backgroundColor: config.mainColor,
+        borderRadius:50,
+        borderWidth: 1,
+        borderColor: '#fff'
+    }
 })
