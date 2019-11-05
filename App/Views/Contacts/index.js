@@ -98,10 +98,16 @@ export default class HomeScreen extends React.Component {
   // }
 
   componentDidMount() {
+<<<<<<< HEAD
       this.setState({
           loading: false
       })
       this.props.navigation.setParams({ addDevice: () => this.addDevice() })
+=======
+    this.setState({
+      loading: false
+    })
+>>>>>>> ddaebc658f5b83f799b0f80972f32181bb296c74
   }
 
   render() {
