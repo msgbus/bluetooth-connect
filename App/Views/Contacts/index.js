@@ -12,6 +12,7 @@ import {Text,Button,Picker,FlatList,TouchableOpacity,Alert} from 'react-native'
 import storage from '@Utils/storage'
 import AsyncStorage from '@react-native-community/async-storage'
 import Toast from 'react-native-root-toast';
+import AwesomeIcon from 'react-native-vector-icons/Ionicons'
 
 import {
   View,
@@ -23,6 +24,7 @@ import {
 import {
   ListItem
 } from 'react-native-elements'
+import Icon from "../../Components/Icon";
 
 @connect(state => ({
   contacts: state.contacts.contacts
@@ -40,7 +42,7 @@ export default class HomeScreen extends React.Component {
       title: t('global.devices'),
       headerRight: (
           <HeaderButton
-              icon='ios7reload'
+              icon='ios7redooutline'
               onPressButton={onPressRightButtonFunc }
           />
       )
@@ -62,50 +64,6 @@ export default class HomeScreen extends React.Component {
     }
   }
 
-    updateCurrentDevice = (deviceUUID) => {
-        console.log('current device', deviceUUID);
-        this.setState({ currentDevice: deviceUUID })
-    };
-  //
-  // _renderItem({ item }) {
-  //   return (
-  //     <View>
-  //       <ListItem
-  //         chevron
-  //         bottomDivider
-  //         containerStyle={viewStyles.listItem}
-  //         subtitleStyle={viewStyles.subtitleStyle}
-  //         leftAvatar={{ source: { uri: getRemoteAvatar(item.avatar) } }}
-  //         title={item.nickname}
-  //         subtitle={item.location}
-  //         onPress={_ => { this.props.navigation.navigate('Message', { user: item }) }}
-  //       />
-  //     </View>
-  //   )
-  // }
-  //
-  // _renderListEmpty() {
-  //   if (this.state.loading) {
-  //     return (
-  //       <View style={viewStyles.loadingBox}>
-  //         <ActivityIndicator size="large"/>
-  //       </View>
-  //     )
-  //   }
-  //   return (
-  //     <EmptyBox style={{ height: 250 }}/>
-  //   )
-  // }
-  //
-  // _renderSectionHeader({ section: { title } }) {
-  //   return (
-  //     <ListTitle title={title}/>
-  //   )
-  // }
-  //
-  // _keyExtractor(item, index) {
-  //   return index.toString()
-  // }
 
   componentDidMount() {
       this.setState({
@@ -146,16 +104,19 @@ export default class HomeScreen extends React.Component {
 
     renderFooter=()=>{
       return (
-          <View style={{marginBottom:30}}>
-            <TouchableOpacity
-                activeOpacity={0.7}
-                // disabled={this.state.isConnected?true:false}
-                onPress={()=>{this.addDevice()}}
-                style={viewStyles.buttonView}>
-                <View style={{flexDirection:'row', marginLeft: 10,flex:1}}>
-                    <Text style={{color:'white',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>
-                </View>
-            </TouchableOpacity>
+          <View style={{justifyContent:'center',alignItems:'center'}}>
+              <View>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    // disabled={this.state.isConnected?true:false}
+                    onPress={()=>{this.addDevice()}}
+                    style={viewStyles.addDeviceButtonView}>
+                    <View style={{flexDirection:'row',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center'}}>
+                        <AwesomeIcon name='ios-add-circle-outline' style={{fontSize: 100, color:"#CCC"}}/>
+                        {/*<Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>*/}
+                    </View>
+                </TouchableOpacity>
+              </View>
           </View>
       )
     }
@@ -281,5 +242,13 @@ const viewStyles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         textAlign:'center'
+    },
+    addDeviceButtonView:{
+        backgroundColor: 'transparent',
+        marginTop:50,
+        marginBottom:30,
+        borderRadius:100,
+        width:100,
+        height:100
     }
 })
