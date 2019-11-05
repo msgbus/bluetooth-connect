@@ -73,22 +73,13 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount () {
-    this.setState({
-      refreshing: true
-    })
-    this.props.navigation.setParams({ openPublisher: () => this.openPublisher() })
-    this.props.fetchUserInfo()
-    this.props.fetchTimeline().then(_ => {
-      this.setState({
-        refreshing: false
-      })
-    })
+    this._onRefresh()
   }
 
   _renderItem({ item }) {
     console.log('render item', item)
     if (item.type === 'Weport T1') {
-      return (<TwsT1 post={item}/>)
+      return (<TwsT1 device={item}/>)
     }
   }
 
