@@ -407,16 +407,18 @@ export default class App extends Component {
             type: 'Weport T1',
             deviceId: this.state.deviceId
         }];
-        const deviceInfo2 = {
-            name: this.state.deviceName,
-            type: 'Weport T2',
-            deviceId: this.state.deviceId
+        console.log("deviceInfo lenth",deviceInfo.length)
+        const deviceData = {
+            deviceArray: deviceInfo,
+            currentIndex:0
         };
-        // var deviceInfoJson = JSON.stringify(deviceInfo);
-        deviceInfo.push(deviceInfo2);
-        console.log(deviceInfo);
-        storage.save("boundDevices",deviceInfo);
 
+        // var deviceInfoJson = JSON.stringify(deviceInfo);
+        // deviceData.push(deviceArr);
+        // deviceData.push(currDevice);
+        console.log(deviceData);
+        storage.save("boundDevices",deviceData);
+        this.alert("绑定成功!")
         // let res = await storage.get("boundDevices");
         // console.log("res:",res);
 
