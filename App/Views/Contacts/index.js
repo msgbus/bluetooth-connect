@@ -8,9 +8,10 @@ import EmptyBox from '@Components/EmptyBox'
 import { fetchContacts } from '@Store/Actions'
 import { getRemoteAvatar } from '@Utils'
 import HeaderButton from '@Components/HeaderButton'
-import {Text,Button,Picker,FlatList,TouchableOpacity} from 'react-native'
+import {Text,Button,Picker,FlatList,TouchableOpacity,Alert} from 'react-native'
 import storage from '@Utils/storage'
 import AsyncStorage from '@react-native-community/async-storage'
+import Toast from 'react-native-root-toast';
 
 import {
   View,
@@ -55,9 +56,9 @@ export default class HomeScreen extends React.Component {
     super(props)
     this.state = {
         loading: true,
-        currentDeviceIndex: 0,
+        currentDeviceIndex: -1,
         devices:[],
-
+        refreshing: true,
     }
   }
 
@@ -117,6 +118,12 @@ export default class HomeScreen extends React.Component {
       this.getBoundDevices()
   }
 
+    _onRefresh() {
+        this.setState({
+            refreshing: true
+        });
+        this.getBoundDevices();
+    }
   render() {
     return (
         <View style={viewStyles.container}>
@@ -129,6 +136,8 @@ export default class HomeScreen extends React.Component {
                     keyExtractor={item=>item.name}
                     data={this.state.devices}
                     ListFooterComponent={this.renderFooter}
+                    onRefresh={this._onRefresh.bind(this)}
+                    refreshing={this.state.refreshing}
                 />
             }
         </View>
@@ -176,12 +185,55 @@ export default class HomeScreen extends React.Component {
                 loading: false
             });
             console.log("get bound value:",value);
-            this.setState({devices : value.deviceArray, currentDeviceIndex:value.currentIndex});
-            console.log("state devices:",this.state.devices)
+            this.setState({devices : value.deviceArray, currentDeviceIndex:value.currentIndex, refreshing:false});
+            // console.log("state devices:",this.state.devices)
         });
     }
 
     setCurrentDevice(item) {
+      if (item.index == this.state.currentDeviceIndex) {
+          Alert.alert(
+              '提示',
+              "当前设备已是默认设备！",
+              [
+                  {text: '确定'},
+              ]
+          );
+      } else {
+          Alert.alert(
+              '提示',
+              "是否设置当前设备为默认设备？",
+              [
+                  {text: '取消'},
+                  {text: '确定', onPress: () => {
+                          if (item.index >= 0 && item.index <= this.state.devices.length)
+                          {
+                              var deviceInfo = this.state.devices;
+                              console.log("deviceInfo lenth and current index",deviceInfo.length,item.index);
+                              const deviceData = {
+                                  deviceArray: deviceInfo,
+                                  currentIndex:item.index
+                              };
+                              console.log(deviceData);
+                              storage.save("boundDevices",deviceData);
+                              let toast = Toast.show('绑定成功！', {
+                                  duration: Toast.durations.LONG,
+                                  position: Toast.positions.BOTTOM,
+                                  shadow: true,
+                                  animation: true,
+                                  hideOnPress: true,
+                                  delay: 100
+                              });
+                              setTimeout(function () {
+                                  Toast.hide(toast);
+                              }, 1000);
+                                this.getBoundDevices();
+                          }
+                      }
+                  }
+              ]
+          )
+      }
 
     }
 }
