@@ -18,6 +18,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 import TwsT1 from "../../Components/Tws"
+import storage from '@Utils/storage'
 
 @connect(state => ({
   timeline: state.home.timeline
@@ -51,6 +52,7 @@ export default class HomeScreen extends React.Component {
       loading: false,
       loadedEnd: false,
       loadResultOpacity: new Animated.Value(0),
+      devices: [],
     }
     this.fadeInAnimated = Animated.timing(
       this.state.loadResultOpacity,
@@ -84,9 +86,10 @@ export default class HomeScreen extends React.Component {
   }
 
   _renderItem({ item }) {
-    return (
-      <TwsT1 post={item}/>
-    )
+    console.log('render item', item)
+    if (item.type === 'Weport T1') {
+      return (<TwsT1 post={item}/>)
+    }
   }
 
   _keyExtractor(item, index) {
@@ -99,7 +102,7 @@ export default class HomeScreen extends React.Component {
         <FlatList
           contentContainerStyle={{ paddingBottom: 10 }}
           keyExtractor={this._keyExtractor}
-          data={[{}]}
+          data={this.state.devices}
           renderItem={this._renderItem.bind(this)}
           onRefresh={this._onRefresh.bind(this)}
           onEndReached= {this._onEndReached.bind(this)}
@@ -124,9 +127,10 @@ export default class HomeScreen extends React.Component {
     this.setState({
       refreshing: true
     })
-    this.props.refreshTimeline().then(_ => {
+    storage.get("boundDevices").then(devices => {
       this.setState({
-        refreshing: false
+        refreshing: false,
+        devices: devices
       })
     })
   }
