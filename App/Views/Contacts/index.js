@@ -150,11 +150,54 @@ export default class HomeScreen extends React.Component {
                         </View>
                     </View>
                 </TouchableOpacity>
-                <View style={{justifyContent: "center", alignItems: "center", textAlign:'center',flex:1,marginTop:5}}>
-                    <AwesomeIcon name='ios-add-circle-outline' style={{fontSize: 50, color:"#CCC"}}/>
-                </View>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={()=>{this.rmDevice(item)}}
+                     style={[viewStyles.itemFontView,{flex:1}]}>
+                    <View style={{justifyContent: "center", alignItems: "center", textAlign:'center',marginTop:5}}>
+                        <AwesomeIcon name='ios-remove-circle-outline' style={{fontSize: 60, color:"#C55"}}/>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
+    }
+
+    rmDevice(item) {
+      this.state.devices.splice(item.index,1);
+      if (item.index == this.state.currentDeviceIndex) {
+          this.state.currentDeviceIndex = 0;
+      }
+
+
+        Alert.alert(
+            '提示',
+            "是否删除该设备？",
+            [
+                {text: '取消'},
+                {text: '确定', onPress: () => {
+                        const deviceData = {
+                            deviceArray: this.state.devices,
+                            currentIndex:this.state.currentDeviceIndex
+                        };
+
+                        console.log(deviceData);
+                        storage.save("boundDevices",deviceData);
+                        let toast = Toast.show('删除成功！', {
+                            duration: Toast.durations.LONG,
+                            position: Toast.positions.BOTTOM,
+                            shadow: true,
+                            animation: true,
+                            hideOnPress: true,
+                            delay: 100
+                        });
+                        setTimeout(function () {
+                            Toast.hide(toast);
+                        }, 1000);
+                        this.getBoundDevices();
+                    }
+                }
+            ]
+        )
     }
 
     async getBoundDevices() {

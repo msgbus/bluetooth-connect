@@ -399,28 +399,54 @@ export default class App extends Component {
     }
 
     boundDevice = async () => {
-        // var deviceName = this.state.deviceName;
-        console.log("bound device:",this.state.deviceName,this.state.deviceId);
+        await storage.get('boundDevices').then(value=>{
+            console.log("get bound value:",value);
+            console.log("bound device:",this.state.deviceName,this.state.deviceId);
 
-        var deviceInfo = [{
-            name: this.state.deviceName,
-            type: 'Weport T1',
-            deviceId: this.state.deviceId
-        }];
-        console.log("deviceInfo lenth",deviceInfo.length)
-        const deviceData = {
-            deviceArray: deviceInfo,
-            currentIndex:0
-        };
 
-        // var deviceInfoJson = JSON.stringify(deviceInfo);
-        // deviceData.push(deviceArr);
-        // deviceData.push(currDevice);
-        console.log(deviceData);
-        storage.save("boundDevices",deviceData);
-        this.alert("绑定成功!")
-        // let res = await storage.get("boundDevices");
-        // console.log("res:",res);
+            var deviceArr = [];
+            var currentIndex = 0;
+            if (value != null){
+                deviceArr = value.deviceArray;
+                var currentIndex = value.currentIndex;
+            }
+
+            var deviceInfo = {
+                name: this.state.deviceName,
+                type: 'Weport T1',
+                deviceId: this.state.deviceId
+            };
+            
+            for (var i = 0; i<deviceArr.length; i++) {
+                if ((this.state.deviceId == deviceArr[i].deviceId) && (this.state.deviceName == deviceArr[i].name)) {
+                    this.alert("已绑定过该设备!");
+                    return
+                } else {
+                    if (this.state.deviceId == deviceArr[i].deviceId){
+                        deviceArr[i].name = this.state.deviceName;
+                        const deviceData = {
+                            deviceArray: deviceArr,
+                            currentIndex:currentIndex
+                        };
+
+                        console.log(deviceData);
+                        storage.save("boundDevices",deviceData);
+                        this.alert("设备修改成功!");
+                        return
+                    }
+                }
+            }
+            deviceArr.push(deviceInfo);
+            console.log("deviceInfo lenth",deviceArr.length);
+            const deviceData = {
+                deviceArray: deviceArr,
+                currentIndex:currentIndex
+            };
+
+            console.log(deviceData);
+            storage.save("boundDevices",deviceData);
+            this.alert("绑定成功!")
+        });
 
     }
     changeBroatcastName(name) {
