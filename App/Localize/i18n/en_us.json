@@ -53,6 +53,7 @@
     "connecting": "Connecting",
     "searching": "Searching",
     "disconnectBt": "Disconnect",
+    "connectFail":"Connect failed",
     "searchBt": "Search",
     "currentDevice": "Current Device",
     "availableDevice": "Available Devices",

@@ -112,8 +112,9 @@ export default class App extends Component {
             BluetoothManager.stopScan();
             this.setState({scaning:false});
         }
-        if(BluetoothManager.isConnecting){
+        if(this.state.isConnecting){
             console.log('当前蓝牙正在连接时不能打开另一个连接进程');
+            RRCLoading.hide();
             return;
         }
         let newData = [...this.deviceMap.values()];
@@ -132,6 +133,8 @@ export default class App extends Component {
             .catch(err=>{
                 newData[item.index].isConnecting = false;
                 this.setState({data:[...newData]});
+                this.alert(t('blueTooth.connectFail'));
+                RRCLoading.hide();
             })
     }
 

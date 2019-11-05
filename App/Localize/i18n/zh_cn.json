@@ -52,6 +52,7 @@
     "modifySuccess":"修改成功，请重启耳机！",
     "modifyFail":"修改失败",
     "connecting":"连接中",
+    "connectFail":"连接失败",
     "searching":"正在搜索中",
     "disconnectBt":"断开蓝牙",
     "searchBt":"搜索蓝牙",
