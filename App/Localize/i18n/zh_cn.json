@@ -49,7 +49,7 @@
   "blueTooth":{
     "title":"添加设备",
     "openBt":"请打开手机蓝牙后再搜索",
-    "modifySuccess":"修改成功",
+    "modifySuccess":"修改成功，请重启耳机！",
     "modifyFail":"修改失败",
     "connecting":"连接中",
     "searching":"正在搜索中",
@@ -64,6 +64,8 @@
     "boundDevice":"绑定设备",
     "alreadyBoundDevice":"已绑定过该设备!",
     "modifyDeviceNameSuccess":"设备修改成功!",
-    "boundSuccess":"绑定成功！"
+    "boundSuccess":"绑定成功！",
+    "loading":"获取中...",
+    "modifying":"修改中..."
   }
 }

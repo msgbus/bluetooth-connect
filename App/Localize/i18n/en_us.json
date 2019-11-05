@@ -48,8 +48,8 @@
   "blueTooth": {
     "title": "Add Device",
     "openBt": "Please open your phone Bluetooth and search again!",
-    "modifySuccess": "modify Successed!",
-    "modifyFail": "modify Failed!",
+    "modifySuccess": "Modify successed, please restart the earphone!",
+    "modifyFail": "Modify failed!",
     "connecting": "Connecting",
     "searching": "Searching",
     "disconnectBt": "Disconnect",
@@ -63,6 +63,8 @@
     "boundDevice": "Bind this device",
     "alreadyBoundDevice": "This device has been bound!",
     "modifyDeviceNameSuccess": "The device name was successfully modified.",
-    "boundSuccess": "Bound successed!"
+    "boundSuccess": "Bound successed!",
+    "loading":"loading...",
+    "modifying":"modifying..."
   }
 }

@@ -24,6 +24,7 @@ import {decode as atob, encode as btoa} from 'base-64'
 import {Buffer} from "buffer";
 import DialogInput from 'react-native-dialog-input';
 import storage from '@Utils/storage'
+import { RRCLoading } from 'react-native-overlayer';
 
 export default class App extends Component {
     constructor(props) {
@@ -102,7 +103,11 @@ export default class App extends Component {
         }
     }
    
-    connect(item){        
+    connect(item){
+        const options = {  text: t('blueTooth.connecting') };
+        RRCLoading.setLoadingOptions(options);
+        RRCLoading.show();
+
         if(this.state.scaning){  //连接的时候正在扫描，先停止扫描
             BluetoothManager.stopScan();
             this.setState({scaning:false});
@@ -121,6 +126,8 @@ export default class App extends Component {
                 this.setState({deviceName:item.item.name,deviceId:item.item.id});
                 this.onDisconnect();
                 this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
+                RRCLoading.hide();
+
             })
             .catch(err=>{
                 newData[item.index].isConnecting = false;
@@ -208,6 +215,7 @@ export default class App extends Component {
                 this.setState({battery:String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%   "+String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%"})
             }
         }
+        RRCLoading.hide();
     }
 
     getVersion(bytesbuf){
@@ -217,9 +225,11 @@ export default class App extends Component {
                                 +"副: ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"})
             }
         }
+        RRCLoading.hide();
     }
 
     setBroadcastNameResp(bytesbuf){
+        RRCLoading.hide();
         if (bytesbuf.length == 6 && bytesbuf[0] == 200 && bytesbuf[1] == 2 ){
             if (bytesbuf[3] == 0) {
                 this.alert(t("blueTooth.modifySuccess"));
@@ -274,7 +284,7 @@ export default class App extends Component {
                 style={styles.item}>                         
                 <View style={{flexDirection:'row', marginTop: 10, marginLeft: 10}}>
                     <Text style={{color:'black'}}>{data.name?data.name:''}</Text>
-                    <Text style={{color:"red",marginLeft:50}}>{data.isConnecting?t('blueTooth.connecting'):''}</Text>
+                    {/*<Text style={{color:"red",marginLeft:50}}>{data.isConnecting?t('blueTooth.connecting'):''}</Text>*/}
                 </View>
                 <Text style={{marginLeft:10}}>{data.id}</Text>
 
@@ -443,6 +453,10 @@ export default class App extends Component {
 
     }
     changeBroatcastName(name) {
+
+        const options = {  text: t('blueTooth.modifying') };
+        RRCLoading.setLoadingOptions(options);
+        RRCLoading.show();
         console.log("change name:",name)
         var bytes = new Array()
         bytes.push(200);
@@ -477,6 +491,9 @@ export default class App extends Component {
     }
 
     checkBattery(){
+        const options = {  text: t('blueTooth.loading') };
+        RRCLoading.setLoadingOptions(options);
+        RRCLoading.show();
         // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
         var bytes = new Array()
         bytes.push(106);
@@ -487,6 +504,10 @@ export default class App extends Component {
         BluetoothManager.write(bytes)
     }
     checkVersion(){
+
+        const options = {  text: t('blueTooth.loading') };
+        RRCLoading.setLoadingOptions(options);
+        RRCLoading.show();
         // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
         var bytes = new Array()
         bytes.push(201);
