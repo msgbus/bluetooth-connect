@@ -173,7 +173,7 @@ export default class HomeScreen extends React.Component {
                 loading: false
             });
             console.log("get bound value:",value);
-            this.setState({devices : value});
+            this.setState({devices : value.deviceArray});
             console.log("state devices:",this.state.devices)
         });
         // const devices = [
