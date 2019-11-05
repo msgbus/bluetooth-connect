@@ -8,11 +8,13 @@ import EmptyBox from '@Components/EmptyBox'
 import { fetchContacts } from '@Store/Actions'
 import { getRemoteAvatar } from '@Utils'
 import HeaderButton from '@Components/HeaderButton'
-import {Text,Button,Picker,FlatList,TouchableOpacity,Alert} from 'react-native'
+import {Text,Button,Picker,FlatList,TouchableOpacity,Alert,Image} from 'react-native'
 import storage from '@Utils/storage'
 import AsyncStorage from '@react-native-community/async-storage'
 import Toast from 'react-native-root-toast';
 import AwesomeIcon from 'react-native-vector-icons/Ionicons'
+import T1_Icon from '@assets/T1_icon.jpg'
+import T2_Icon from '@assets/T1_icon.jpg'
 
 import {
   View,
@@ -111,7 +113,7 @@ export default class HomeScreen extends React.Component {
                     // disabled={this.state.isConnected?true:false}
                     onPress={()=>{this.addDevice()}}
                     style={viewStyles.addDeviceButtonView}>
-                    <View style={{flexDirection:'row',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center'}}>
+                    <View style={{justifyContent: "center", alignItems: "center", textAlign:'center'}}>
                         <AwesomeIcon name='ios-add-circle-outline' style={{fontSize: 100, color:"#CCC"}}/>
                         {/*<Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>*/}
                     </View>
@@ -124,19 +126,34 @@ export default class HomeScreen extends React.Component {
     deviceItems=(item)=>{
         let data = item.item;
         return(
-            <TouchableOpacity
-                activeOpacity={0.7}
-                // disabled={this.state.isConnected?true:false}
-                onPress={()=>{this.setCurrentDevice(item)}}
-                style={(item.index == this.state.currentDeviceIndex)?viewStyles.buttonView: viewStyles.otherButtonView}>
-                <View style={{flexDirection:'row', marginLeft: 10,flex:1}}>
-                    <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1,fontWeight:'bold'}]}>{data.name}</Text>
+            <View style = {{flexDirection:'row',flex:6}}>
+
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    // disabled={this.state.isConnected?true:false}
+                    onPress={()=>{this.setCurrentDevice(item)}}
+                    style={[(item.index == this.state.currentDeviceIndex)?viewStyles.buttonView: viewStyles.otherButtonView,{flex:5}]}>
+                    <View style = {{flexDirection:'row',flex:7,height:80}}>
+                        <View style = {{flex:2,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign:'center'}}>
+                            <Image
+                                source={T1_Icon}
+                                resizeMode={'cover'}
+                                style={{height:75,width:75,borderRadius:10}}
+                            />
+                        </View>
+                        <View style = {{flex:5,paddingTop:10,paddingBottom:10}}>
+                            <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1,fontWeight:'bold',fontSize:20}]}>{data.name}</Text>
+                            <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <View style={{justifyContent: "center", alignItems: "center", textAlign:'center',flex:1,marginTop:5}}>
+                    <AwesomeIcon name='ios-add-circle-outline' style={{fontSize: 50, color:"#CCC"}}/>
                 </View>
-                <View style={{flexDirection:'row',flex:1,marginTop:5}}>
-                    <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"Type: "+data.type}</Text>
-                    <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>
-                </View>
-            </TouchableOpacity>
+            </View>
         );
     }
 
@@ -220,8 +237,8 @@ const viewStyles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
         marginTop:10,
-        paddingTop:10,
-        paddingBottom:10,
+        // paddingTop:10,
+        // paddingBottom:10,
         backgroundColor: config.mainColor,
         borderRadius:15,
         borderWidth: 1,
@@ -231,8 +248,8 @@ const viewStyles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
         marginTop:10,
-        paddingTop:10,
-        paddingBottom:10,
+        // paddingTop:10,
+        // paddingBottom:10,
         backgroundColor: '#858585',
         borderRadius:15,
         borderWidth: 1,
