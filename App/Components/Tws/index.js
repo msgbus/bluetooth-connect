@@ -7,6 +7,8 @@ import t from '@Localize'
 import ParsedText from 'react-native-parsed-text'
 import { getRemoteAvatar } from '@Utils'
 import { formatDistance } from 'date-fns'
+import { refreshDevice, updateRefreshHome } from '@Store/Actions'
+import {decode as atob, encode as btoa} from 'base-64'
 
 import {
   View,
@@ -22,6 +24,18 @@ import {
 
 import WEPORT_T1_IMG from '@assets/Weport-T1.png'
 import BleModule from "../../Bluetooth/BleModule";
+
+@connect(state => ({
+  updateDevice: state.home.updateDevice
+}), {
+  refreshDevice
+})
+
+@connect(state => ({
+  refreshHome: state.home.refreshing
+}), {
+  updateRefreshHome
+})
 
 export default class TwsT1 extends React.Component {
   constructor(props) {
@@ -45,12 +59,24 @@ export default class TwsT1 extends React.Component {
     this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
     this.deviceMap = new Map();
 
+
     global.BluetoothManager = new BleModule();
 
     const { device } = this.props
 
-    console.log('connect', device)
-    this.connect(device)
+    // this.connect(device)
+  }
+
+  componentDidMount(){
+    // 监听蓝牙开关
+    // console.log(global.BluetoothManager)
+    this.onStateChangeListener = global.BluetoothManager.manager.onStateChange((state) => {
+      console.log("onStateChange: ", state);
+      if(state == 'PoweredOn'){
+        this.scan();
+      }
+    })
+    this.scan()
   }
 
   componentWillUnmount() {
@@ -65,13 +91,48 @@ export default class TwsT1 extends React.Component {
     this.ble.destroy()
   }
 
-  connect(device){
-    if(this.state.scaning){  //连接的时候正在扫描，先停止扫描
+  scan(){
+    if(!this.scaning) {
+      this.scaning = true
+      this.deviceMap.clear();
+      BluetoothManager.manager.startDeviceScan(null, null, (error, device) => {
+        if (error) {
+          console.log('startDeviceScan error:',error)
+          if(error.errorCode == 102){
+            this.alert('请打开手机蓝牙后再搜索');
+          }
+          this.scaning = false
+        }else{
+          console.log(device.id,device.name);
+          this.deviceMap.set(device.id,device); //使用Map类型保存搜索到的蓝牙设备，确保列表不显示重复的设备
+        }
+      })
+      this.scanTimer && clearTimeout(this.scanTimer);
+      this.scanTimer = setTimeout(()=>{
+        if(this.scaning){
+          this.scaning = false
+          BluetoothManager.stopScan();
+
+          const { device } = this.props
+          this.connect(device)
+        }
+      }, 2000)  // 5秒后停止搜索
+    }else {
+      this.scaning = false;
       BluetoothManager.stopScan();
-      this.setState({scaning:false});
+    }
+  }
+
+  connect(device){
+    console.log('tws connect', device)
+
+    if(this.scaning){  //连接的时候正在扫描，先停止扫描
+      this.scaning = false
+      BluetoothManager.stopScan();
     }
     if(BluetoothManager.isConnecting){
       console.log('当前蓝牙正在连接时不能打开另一个连接进程');
+      this.checkBattery()
       return;
     }
     BluetoothManager.connect(device.deviceId)
@@ -79,16 +140,19 @@ export default class TwsT1 extends React.Component {
         // this.setState({deviceName:item.item.name,deviceId:item.item.id});
         this.onDisconnect();
         this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
+        this.checkBattery()
+        this.props.updateRefreshHome(false)
       })
       .catch(err=>{
-        console.log(err);
+        console.log('tws connect failed', err);
+
+        this.props.updateRefreshHome(false)
       })
   }
 
   read=(index)=>{
     BluetoothManager.read(index)
       .then(value=>{
-        this.setState({readData:value});
       })
       .catch(err=>{
 
@@ -103,10 +167,6 @@ export default class TwsT1 extends React.Component {
     BluetoothManager.write(bytes)
       .then(characteristic=>{
         this.bluetoothReceiveData = [];
-        this.setState({
-          writeData:this.state.text,
-          text:'',
-        })
       })
       .catch(err=>{
 
@@ -121,10 +181,6 @@ export default class TwsT1 extends React.Component {
     BluetoothManager.writeWithoutResponse(this.state.text,index,type)
       .then(characteristic=>{
         this.bluetoothReceiveData = [];
-        this.setState({
-          writeData:this.state.text,
-          text:'',
-        })
       })
       .catch(err=>{
 
@@ -139,18 +195,16 @@ export default class TwsT1 extends React.Component {
       ServiceUUid,CharUUID,
       (error, characteristic) => {
         if (error) {
-          this.setState({isMonitoring:false});
           console.log('monitor fail:',error);
         }else{
-          this.setState({isMonitoring:true});
           this.bluetoothReceiveData.push(characteristic.value); //数据量多的话会分多次接收
-          this.setState({receiveData:this.bluetoothReceiveData.join('')});
           console.log('monitor success',characteristic.value);
           var bytebuf = this.base64ToArrayBuffer(characteristic.value);
           if(bytebuf.length>=6)
           {
             if(bytebuf[0] == 106 && bytebuf[1] == 2){
               this.getBattery(bytebuf)
+              this.checkVersion()
             }
             if(bytebuf[0] == 201 && bytebuf[1] == 2){
               this.getVersion(bytebuf)
@@ -167,7 +221,9 @@ export default class TwsT1 extends React.Component {
   getBattery(bytesbuf){
     if(bytesbuf.length == 10 && bytesbuf[0] == 106 && bytesbuf[1] == 2){
       if (bytesbuf[4] == 4){
-        this.setState({battery:String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%   "+String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%"})
+        const s = String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%   "+String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%"
+        console.log("battery", s)
+        this.setState({battery: s})
       }
     }
   }
@@ -175,8 +231,10 @@ export default class TwsT1 extends React.Component {
   getVersion(bytesbuf){
     if(bytesbuf.length == 14 && bytesbuf[0] == 201 && bytesbuf[1] == 2){
       if (bytesbuf[4] == 8){
-        this.setState({version:"主: ["+bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6]+"]"+"   "
-          +"副: ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"})
+        const s = "M: ["+bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6]+"]"+"   "
+        +"S: ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"
+        console.log("version", s)
+        this.setState({version:s})
       }
     }
   }
@@ -207,7 +265,6 @@ export default class TwsT1 extends React.Component {
     this.disconnectListener = BluetoothManager.manager.onDeviceDisconnected(BluetoothManager.peripheralId,(error,device)=>{
       if(error){  //蓝牙遇到错误自动断开
         console.log('onDeviceDisconnected','device disconnect',error);
-        this.setState({data:[...this.deviceMap.values()],isConnected:false});
       }else{
         this.disconnectListener && this.disconnectListener.remove();
         console.log('onDeviceDisconnected','device disconnect',device.id,device.name);
@@ -219,10 +276,8 @@ export default class TwsT1 extends React.Component {
   disconnect(){
     BluetoothManager.disconnect()
       .then(res=>{
-        this.setState({data:[...this.deviceMap.values()],isConnected:false});
       })
       .catch(err=>{
-        this.setState({data:[...this.deviceMap.values()],isConnected:false});
       })
   }
 
@@ -283,6 +338,17 @@ export default class TwsT1 extends React.Component {
 
   render() {
     const { device } = this.props
+    console.log("tws render")
+    // if (this.state.isConnected == false) {
+    //   // BluetoothManager.disconnect();
+    //   BluetoothManager.destroy();
+    //   BluetoothManager = new BleModule();
+
+    // if (this.state.battery == "") {
+      if (!this.scaning) { this.scan() }
+    // }
+    // }
+
     return (
       <View style={styles.container}>
         <Image source={WEPORT_T1_IMG} resizeMode={'cover'}/>
@@ -297,12 +363,12 @@ export default class TwsT1 extends React.Component {
       <View style={styles.tools}>
         <TouchableOpacity style={[styles.toolItemContainer, styles.toolItemBorder]}>
           <View style={styles.toolItem}>
-            <Text style={styles.toolItemText}>{ this.state.batteryL }</Text>
+            <Text style={styles.toolItemText}>{ this.state.battery }</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.toolItemContainer}>
           <View style={styles.toolItem}>
-            <Text style={styles.toolItemText}>{ this.state.batteryR }</Text>
+            <Text style={styles.toolItemText}>{ this.state.battery }</Text>
           </View>
         </TouchableOpacity>
       </View>

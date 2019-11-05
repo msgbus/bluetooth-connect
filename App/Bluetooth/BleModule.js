@@ -187,8 +187,10 @@ export default class BleModule{
      * 断开蓝牙
      * */
     disconnect(){
-        return new Promise( (resolve, reject) =>{
-            this.manager.cancelDeviceConnection(this.peripheralId)
+      return new Promise( (resolve, reject) =>{
+        this.isConnecting = false;
+        
+        this.manager.cancelDeviceConnection(this.peripheralId)
                 .then(res=>{
                     console.log('disconnect success',res);
                     resolve(res);
@@ -214,7 +216,6 @@ export default class BleModule{
                     resolve(value);     
                 },error=>{
                     console.log('read fail: ',error);
-                    this.alert('read fail: ' + error.reason);
                     reject(error);
                 })
         });
@@ -242,7 +243,7 @@ export default class BleModule{
                     resolve(characteristic);
                 },error=>{
                     console.log('write fail: ',error);
-                    this.alert('write fail: ',error.reason);
+                    this.disconnect()
                     reject(error);
                 })
         // });
@@ -276,7 +277,6 @@ export default class BleModule{
                     resolve(characteristic);
                 },error=>{
                     console.log('writeWithoutResponse fail: ',error);
-                    this.alert('writeWithoutResponse fail: ',error.reason);
                     reject(error);
                 })
         });

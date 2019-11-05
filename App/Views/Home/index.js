@@ -5,7 +5,7 @@ import styles from '@Styles'
 import t from '@Localize'
 import HeaderButton from '@Components/HeaderButton'
 import Post from '@Components/Post'
-import { fetchUserInfo, fetchTimeline, refreshTimeline, loadMoreTimeline, setModalVisibleStatus } from '@Store/Actions'
+import { fetchUserInfo, fetchTimeline, refreshTimeline, loadMoreTimeline, setModalVisibleStatus, refreshDevice, updateRefreshHome } from '@Store/Actions'
 
 import {
   View,
@@ -29,7 +29,19 @@ import storage from '@Utils/storage'
   fetchUserInfo,
   fetchTimeline,
   refreshTimeline,
-  loadMoreTimeline
+  loadMoreTimeline,
+})
+
+@connect(state => ({
+  updateDevice: state.home.updateDevice
+}), {
+  refreshDevice
+})
+
+@connect(state => ({
+  refreshing: state.home.refreshing
+}), {
+  updateRefreshHome
 })
 
 export default class HomeScreen extends React.Component {
@@ -38,19 +50,14 @@ export default class HomeScreen extends React.Component {
     const onPressRightButtonFunc = params.openPublisher || function() {}
     return {
       ...config.defaultNavigation,
-      title: t('global.home'),
-      headerRight: (
-        <HeaderButton
-          icon='feedback'
-          onPressButton={ onPressRightButtonFunc }/>
-      )
+      title: t('global.home')
     }
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      refreshing: false,
+      refreshing: this.props.refreshing,
       loading: false,
       loadedEnd: false,
       loadResultOpacity: new Animated.Value(0),
@@ -75,7 +82,7 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount () {
-    // this._getDevice()
+    this._getDevice()
   }
 
   _renderItem(item) {
@@ -117,9 +124,9 @@ export default class HomeScreen extends React.Component {
 
     this._getDevice()
 
-    setTimeout(() => {
-      this.setState({ refreshing: false });
-    }, 2000);
+    this.props.refreshDevice(true)
+
+    this.setState({ refreshing: this.props.refreshing })
   };
 
   _renderDevice () {
@@ -143,19 +150,15 @@ export default class HomeScreen extends React.Component {
   }
 
   _getDevice() {
-    this.setState({
-      refreshing: true
-    })
     storage.get("boundDevices").then(devices => {
       console.log("boundDevices", devices)
       if (devices.deviceArray.length > 0) {
         this.setState({
-          refreshing: false,
           device: devices.deviceArray[devices.currentIndex]
         })
       } else {
         this.setState({
-          refreshing: false
+          device: ""
         })
       }
     })

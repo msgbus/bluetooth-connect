@@ -35,7 +35,21 @@ export default handleActions({
         }
       )
     }
+  },
+  [types.UPDATE_DEVICE] (state, action) {
+    return {
+      ...state,
+      updateDevice: action.payload
+    }
+  },
+  [types.REFRESH_HOME] (state, action) {
+    return {
+      ...state,
+      refreshing: action.payload
+    }
   }
 }, {
-  timeline: []
+  timeline: [],
+  updateDevice: false,
+  refreshing: false
 })
