@@ -44,8 +44,9 @@ export default class HomeScreen extends React.Component {
       title: t('global.devices'),
       headerRight: (
           <HeaderButton
-              icon='ios7redooutline'
+              icon='ios-add'
               onPressButton={onPressRightButtonFunc }
+              customize={true}
           />
       )
     }
@@ -53,7 +54,12 @@ export default class HomeScreen extends React.Component {
 
   addDevice(){
     // alert("add")
-      this.props.navigation.navigate('Bluetooth')
+      this.props.navigation.navigate('Bluetooth', {
+          callback: (data) => {
+              console.log(data); // 打印值为：'回调参数'
+              this.getBoundDevices();
+          }
+      })
   }
 
   constructor(props) {
@@ -70,8 +76,11 @@ export default class HomeScreen extends React.Component {
   componentDidMount() {
       this.setState({
           loading: true
-      })
-      this.props.navigation.setParams({ addDevice: () => this.addDevice() })
+      });
+      this.props.navigation.setParams({
+          addDevice: () => this.addDevice()}
+      );
+
   }
   UNSAFE_componentWillMount(){
       console.log("contacts componentWillMount ");
@@ -133,20 +142,23 @@ export default class HomeScreen extends React.Component {
                     // disabled={this.state.isConnected?true:false}
                     onPress={()=>{this.setCurrentDevice(item)}}
                     style={[(item.index == this.state.currentDeviceIndex)?viewStyles.buttonView: viewStyles.otherButtonView,{flex:5}]}>
-                    <View style = {{flexDirection:'row',flex:7,height:80}}>
-                        <View style = {{flex:2,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textAlign:'center'}}>
-                            <Image
+                    <View style = {{flexDirection:'row',flex:1,height:80}}>
+                        {(this.state.devices[item.index].type == "Weport T1")?
+                            <View style = {{flex:2,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign:'center'}}>
+
+                                <Image
                                 source={T1_Icon}
                                 resizeMode={'cover'}
                                 style={{height:75,width:75,borderRadius:10}}
-                            />
-                        </View>
+                                />
+                            </View>:<View/>
+                        }
                         <View style = {{flex:5,paddingTop:10,paddingBottom:10}}>
                             <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1,fontWeight:'bold',fontSize:20}]}>{data.name}</Text>
-                            <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>
+                            {/*<Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>*/}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -170,11 +182,11 @@ export default class HomeScreen extends React.Component {
 
 
         Alert.alert(
-            '提示',
-            "是否删除该设备？",
+            t("global.tips"),
+            t("contact.deleteOrNot"),
             [
-                {text: '取消'},
-                {text: '确定', onPress: () => {
+                {text: t("global.cancel")},
+                {text: t("global.ok"), onPress: () => {
                         const deviceData = {
                             deviceArray: this.state.devices,
                             currentIndex:this.state.currentDeviceIndex
@@ -182,7 +194,7 @@ export default class HomeScreen extends React.Component {
 
                         console.log(deviceData);
                         storage.save("boundDevices",deviceData);
-                        let toast = Toast.show('删除成功！', {
+                        let toast = Toast.show(t("contact.rmSuccess"), {
                             duration: Toast.durations.LONG,
                             position: Toast.positions.BOTTOM,
                             shadow: true,
@@ -214,19 +226,19 @@ export default class HomeScreen extends React.Component {
     setCurrentDevice(item) {
       if (item.index == this.state.currentDeviceIndex) {
           Alert.alert(
-              '提示',
-              "当前设备已是默认设备！",
+              t("global.tips"),
+              t("contact.alreadyCurrentDevice"),
               [
-                  {text: '确定'},
+                  {text: t("global.ok")},
               ]
           );
       } else {
           Alert.alert(
-              '提示',
-              "是否设置当前设备为默认设备？",
+              t("global.tips"),
+              t("contact.setupCurrentDevice"),
               [
-                  {text: '取消'},
-                  {text: '确定', onPress: () => {
+                  {text: t("global.cancel")},
+                  {text: t("global.ok"), onPress: () => {
                           if (item.index >= 0 && item.index <= this.state.devices.length)
                           {
                               var deviceInfo = this.state.devices;
@@ -237,7 +249,7 @@ export default class HomeScreen extends React.Component {
                               };
                               console.log(deviceData);
                               storage.save("boundDevices",deviceData);
-                              let toast = Toast.show('绑定成功！', {
+                              let toast = Toast.show(t("contact.setupSuccess"), {
                                   duration: Toast.durations.LONG,
                                   position: Toast.positions.BOTTOM,
                                   shadow: true,
@@ -301,7 +313,8 @@ const viewStyles = StyleSheet.create({
     itemFontView: {
         justifyContent: "center",
         alignItems: "center",
-        textAlign:'center'
+        textAlign:'center',
+        textAlignVertical: 'center'
     },
     addDeviceButtonView:{
         backgroundColor: 'transparent',

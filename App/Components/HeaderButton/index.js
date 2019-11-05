@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../Icon'
+import AwesomeIcon from 'react-native-vector-icons/Ionicons'
 
 import {
   View,
@@ -12,7 +13,7 @@ import {
 
 export default class HeaderButton extends React.Component {
   render() {
-    const { icon, text, onPressButton, ...props } = this.props
+    const { icon, text, onPressButton,customize, ...props } = this.props
     if (icon) {
       if (text) {
         return (
@@ -26,7 +27,10 @@ export default class HeaderButton extends React.Component {
       } else {
         return (
           <TouchableOpacity style={styles.iconContainer} onPress={() => onPressButton() }>
-            <Icon name={icon} size={28} color="#fff"/>
+            {(customize)?
+              <AwesomeIcon name={icon} size={28} color={"#fff"}/>:
+                <Icon name={icon} size={28} color="#fff"/>
+            }
           </TouchableOpacity>
         )
       }
@@ -47,7 +51,8 @@ HeaderButton.defaultProps = {
 HeaderButton.propTypes = {
   icon: PropTypes.string,
   text: PropTypes.string,
-  onPressButton: PropTypes.func
+  onPressButton: PropTypes.func,
+    customize:PropTypes.boolean
 }
 
 const styles = StyleSheet.create({

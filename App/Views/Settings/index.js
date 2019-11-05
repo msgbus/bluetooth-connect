@@ -64,22 +64,6 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
     <View style={viewStyles.container}>
-      <Picker selectedValue={this.state.currentDevice} onValueChange={this.updateCurrentDevice}>
-        {
-          this.getBoundDevices().map((item, i) => (
-            <Picker.Item label={item.name} value={item.uuid}/>
-          ))
-        }
-      </Picker>
-      <View style={viewStyles.list}>
-        <ListItem
-          chevron
-          topDivider
-          bottomDivider
-          leftIcon={<AwesomeIcon name='bluetooth' style={{fontSize: 26, color: '#fc3'}}/>}
-          onPress={_ => { this.props.navigation.navigate('Bluetooth') }}
-          title={t('settings.addDevice')}/>
-      </View>
       {
           this.menuList.map((item, i) => (
             <View style={viewStyles.list} key={i}>

@@ -16,6 +16,7 @@ import FeedbackScreen from '@Views/Feedback'
 import MessageScreen from '@Views/Message'
 import PostScreen from '@Views/Post'
 import BluetoothScreen from '../Bluetooth'
+import AwesomeIcon from 'react-native-vector-icons/Ionicons'
 
 import {
   View,
@@ -66,7 +67,8 @@ const TabNavigator = createBottomTabNavigator(
             iconName = `ios7home${focused ? '' : 'outline'}`
             break
           case 'Devices':
-            iconName = `ios7chatbubble${focused ? '' : 'outline'}`
+            iconName = `ios-bluetooth${focused ? '' : 'outline'}`
+              return <AwesomeIcon name='ios-bluetooth' size={22} color={tintColor}/>
             break
           case 'Settings':
             iconName = `ios7gear${focused ? '' : 'outline'}`

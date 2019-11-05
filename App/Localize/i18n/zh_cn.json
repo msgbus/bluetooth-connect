@@ -14,7 +14,9 @@
     "comment": "评论",
     "like": "喜欢",
     "post": "消息",
-    "emptyBox": "暂无内容!!"
+    "emptyBox": "暂无内容!!",
+    "tips":"提示",
+    "cancel":"取消"
   },
   "home": {
     "publisher": "发布框",
@@ -36,5 +38,35 @@
     "feedbackSuccess": "谢谢您的反馈",
     "bluetooth": "Add device",
     "addDevice": "Add device"
+  },
+  "contact":{
+    "deleteOrNot":"是否删除该设备？",
+    "rmSuccess":"删除成功！",
+    "alreadyCurrentDevice":"当前设备已是默认设备",
+    "setupCurrentDevice":"是否设置当前设备为默认设备",
+    "setupSuccess":"设置成功！"
+  },
+  "blueTooth":{
+    "title":"添加设备",
+    "openBt":"请打开手机蓝牙后再搜索",
+    "modifySuccess":"修改成功，请重启耳机！",
+    "modifyFail":"修改失败",
+    "connecting":"连接中",
+    "connectFail":"连接失败",
+    "searching":"正在搜索中",
+    "disconnectBt":"断开蓝牙",
+    "searchBt":"搜索蓝牙",
+    "currentDevice":"当前连接的设备",
+    "availableDevice":"可用设备",
+    "queryPower":"查询电量",
+    "queryVersion":"查询版本",
+    "modifyBtName":"修改蓝牙名称",
+    "inputBtName":"请输入你要修改的广播名",
+    "boundDevice":"绑定设备",
+    "alreadyBoundDevice":"已绑定过该设备!",
+    "modifyDeviceNameSuccess":"设备修改成功!",
+    "boundSuccess":"绑定成功！",
+    "loading":"获取中...",
+    "modifying":"修改中..."
   }
 }
