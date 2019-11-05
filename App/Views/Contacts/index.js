@@ -55,8 +55,9 @@ export default class HomeScreen extends React.Component {
     super(props)
     this.state = {
         loading: true,
-        currentDevice: '',
-        devices:[]
+        currentDeviceIndex: 0,
+        devices:[],
+
     }
   }
 
@@ -111,7 +112,8 @@ export default class HomeScreen extends React.Component {
       })
       this.props.navigation.setParams({ addDevice: () => this.addDevice() })
   }
-  componentWillMount(){
+  UNSAFE_componentWillMount(){
+      console.log("contacts componentWillMount ");
       this.getBoundDevices()
   }
 
@@ -142,7 +144,7 @@ export default class HomeScreen extends React.Component {
                 onPress={()=>{this.addDevice()}}
                 style={viewStyles.buttonView}>
                 <View style={{flexDirection:'row', marginLeft: 10,flex:1}}>
-                    <Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>
+                    <Text style={{color:'white',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>
                 </View>
             </TouchableOpacity>
           </View>
@@ -154,41 +156,33 @@ export default class HomeScreen extends React.Component {
         return(
             <TouchableOpacity
                 activeOpacity={0.7}
-                disabled={this.state.isConnected?true:false}
-                onPress={()=>{this.connect(item)}}
-                style={styles.buttonView}>
+                // disabled={this.state.isConnected?true:false}
+                onPress={()=>{this.setCurrentDevice(item)}}
+                style={(item.index == this.state.currentDeviceIndex)?viewStyles.buttonView: viewStyles.otherButtonView}>
                 <View style={{flexDirection:'row', marginLeft: 10,flex:1}}>
-                    <Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{data.name}</Text>
+                    <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1,fontWeight:'bold'}]}>{data.name}</Text>
                 </View>
                 <View style={{flexDirection:'row',flex:1,marginTop:5}}>
-                    <Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center'}}>{"Type: "+data.type}</Text>
-                    <Text style={{flex:1,justifyContent: "center", alignItems: "center", textAlign:'center'}}>{"UUID: "+data.deviceId}</Text>
+                    <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"Type: "+data.type}</Text>
+                    <Text style={[viewStyles.itemFontView,(item.index == this.state.currentDeviceIndex)?{color:'white'}:{color:'black'},{flex:1}]}>{"UUID: "+data.deviceId}</Text>
                 </View>
             </TouchableOpacity>
         );
     }
+
     async getBoundDevices() {
         await storage.get('boundDevices').then(value=>{
             this.setState({
                 loading: false
             });
             console.log("get bound value:",value);
-            this.setState({devices : value.deviceArray});
+            this.setState({devices : value.deviceArray, currentDeviceIndex:value.currentIndex});
             console.log("state devices:",this.state.devices)
         });
-        // const devices = [
-        //   {
-        //     name: 'Weport T1',
-        //     type: 'Weport T1',
-        //     deviceId: 'uuid1'
-        //   },
-        //   {
-        //     name: 'Weport T2',
-        //     type: 'Weport T2',
-        //     deviceId: 'uuid2'
-        //   }
-        // ]
-        // return devices instanceof Array ? devices : [];
+    }
+
+    setCurrentDevice(item) {
+
     }
 }
 
@@ -216,8 +210,24 @@ const viewStyles = StyleSheet.create({
         paddingTop:10,
         paddingBottom:10,
         backgroundColor: config.mainColor,
-        borderRadius:50,
+        borderRadius:15,
         borderWidth: 1,
         borderColor: '#fff'
+    },
+    otherButtonView: {
+        marginRight:5,
+        marginLeft:5,
+        marginTop:10,
+        paddingTop:10,
+        paddingBottom:10,
+        backgroundColor: '#858585',
+        borderRadius:15,
+        borderWidth: 1,
+        borderColor: '#fff',
+    },
+    itemFontView: {
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign:'center'
     }
 })
