@@ -68,6 +68,9 @@
     "loading":"loading...",
     "modifying":"modifying...",
     "main":"M",
-    "secondary":"S"
+    "secondary":"S",
+    "locationPermissions":"Bluetooth and location permissions",
+    "locationPermissionsMsg":"Apps require Bluetooth and location permissions",
+    "askLater":"Ask later"
   }
 }
