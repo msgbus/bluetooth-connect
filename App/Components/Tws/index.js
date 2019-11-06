@@ -13,16 +13,18 @@ import {decode as atob, encode as btoa} from 'base-64'
 import {
   View,
   Text,
-  Image,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native'
+
+import Image from 'react-native-scalable-image'
 
 import {
   Avatar
 } from 'react-native-elements'
 
-import WEPORT_T1_IMG from '@assets/Weport-T1.png'
+import WEPORT_T1_IMG from '@assets/Weport-T1.jpg'
 import BleModule from "../../Bluetooth/BleModule";
 
 @connect(state => ({
@@ -351,7 +353,7 @@ export default class TwsT1 extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Image source={WEPORT_T1_IMG} resizeMode={'cover'}/>
+        <Image source={WEPORT_T1_IMG}   width={Dimensions.get('window').width}/>
         {this._renderBattery()}
         {this._renderBluetoothName()}
       </View>
@@ -443,7 +445,9 @@ const styles = StyleSheet.create({
     borderColor: '#dadada',
     borderWidth: StyleSheet.hairlineWidth,
     backgroundColor: '#fff',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: "center",
+    flex: 1
   },
   header: {
     padding: 10,
