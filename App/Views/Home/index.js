@@ -28,6 +28,7 @@ import BleModule from "../../Bluetooth/BleModule";
 import Image from 'react-native-scalable-image'
 
 import WEPORT_T1_IMG from '@assets/Weport-T1.jpg'
+import WEPORT_T1_OPEN_IMG from '@assets/Weport-T1-open.jpg'
 import AwesomeIcon from 'react-native-vector-icons/Ionicons'
 
 @connect(state => ({
@@ -80,7 +81,11 @@ export default class HomeScreen extends React.Component {
       data:[],
       isMonitoring:false,
       battery:"",
+      batteryL: "",
+      batteryR: "",
       version:"",
+      versionR: "",
+      versionL: "",
       isDialogVisible: false,
       deviceName:"",
       deviceId:""
@@ -173,8 +178,8 @@ export default class HomeScreen extends React.Component {
       return;
     }
     BluetoothManager.connect(device.deviceId)
-      .then(device=>{
-        // this.setState({deviceName:item.item.name,deviceId:item.item.id});
+      .then(dev=>{
+        this.setState({deviceName: device.name, deviceId: device.deviceId});
         this.setState({isConnected:true});
         this.onDisconnect();
         this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
@@ -260,9 +265,15 @@ export default class HomeScreen extends React.Component {
   getBattery(bytesbuf){
     if(bytesbuf.length == 10 && bytesbuf[0] == 106 && bytesbuf[1] == 2){
       if (bytesbuf[4] == 4){
-        const s = String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%   "+String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%"
+        const s = String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%   "+String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%";
+        const sR = String.fromCharCode(bytesbuf[6])+":"+bytesbuf[7]*10+"%";
+        const sL = String.fromCharCode(bytesbuf[8])+":"+bytesbuf[9]*10+"%";
         console.log("battery", s)
-        this.setState({battery: s})
+        this.setState({
+          battery: s,
+          batteryL: sL,
+          batteryR: sR
+        })
       }
     }
   }
@@ -272,8 +283,14 @@ export default class HomeScreen extends React.Component {
       if (bytesbuf[4] == 8){
         const s = "M: ["+bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6]+"]"+"   "
           +"S: ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"
+        const sR = bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6];
+        const sL = bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10];
         console.log("version", s)
-        this.setState({version:s})
+        this.setState({
+          version:s,
+          versionR: sR,
+          versionL: sL
+        })
       }
     }
   }
@@ -385,15 +402,32 @@ export default class HomeScreen extends React.Component {
 
   _renderBattery() {
     return (
-      <View style={styles.tools}>
-        <TouchableOpacity style={[styles.toolItemContainer, styles.toolItemBorder]}>
-          <View style={styles.toolItem}>
-            <Text style={styles.toolItemText}>{ this.state.battery }</Text>
+      <View style={viewStyles.tools}>
+        <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
+          <View style={viewStyles.toolItem}>
+            <Text style={viewStyles.toolItemText}>{ this.state.batteryL }</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.toolItemContainer}>
-          <View style={styles.toolItem}>
-            <Text style={styles.toolItemText}>{ this.state.battery }</Text>
+        <TouchableOpacity style={viewStyles.toolItemContainer}>
+          <View style={viewStyles.toolItem}>
+            <Text style={viewStyles.toolItemText}>{ this.state.batteryR }</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  _renderVersion() {
+    return (
+      <View style={viewStyles.tools}>
+        <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
+          <View style={viewStyles.toolItem}>
+            <Text style={viewStyles.toolItemText}>{ this.state.versionL }</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={viewStyles.toolItemContainer}>
+          <View style={viewStyles.toolItem}>
+            <Text style={viewStyles.toolItemText}>{ this.state.versionR }</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -402,9 +436,9 @@ export default class HomeScreen extends React.Component {
 
   _renderBluetoothName() {
     return (
-      <View style={styles.tools}>
-        <TouchableOpacity style={[styles.toolItemContainer, styles.toolItemBorder]}>
-          <View style={styles.toolItem}>
+      <View style={viewStyles.tools}>
+        <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
+          <View style={viewStyles.toolItem}>
             <Text>{ this.state.deviceName }</Text>
           </View>
         </TouchableOpacity>
@@ -449,8 +483,6 @@ export default class HomeScreen extends React.Component {
   _renderDevice () {
     console.log("render device", this.state.device)
     if (this.state.device != "") {
-      { this._renderConnectStatus() }
-
       if (this.state.device.type == "Weport T1") {
         return (
           this._renderWeportT1()
@@ -458,24 +490,40 @@ export default class HomeScreen extends React.Component {
       }
     } else {
       return (
-          <Text>Please add device</Text>
-        )
+        <View style={viewStyles.container}>
+          <Image source={WEPORT_T1_OPEN_IMG} width={Dimensions.get('window').width}/>
+          <View style={viewStyles.tools}>
+            <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
+              <View style={viewStyles.toolItem}>
+                <Text>Please open the the charging case add your device</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
     }
   }
 
   _renderConnectStatus() {
-    if (!this.state.isConnected) {
-      return (
-        <View><Text>Pull to connect and refresh</Text></View>
-      )
-    }
+    console.log("_renderConnectStatus")
+    return (
+      <View style={viewStyles.tools}>
+        <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
+          <View style={viewStyles.toolItem}>
+            <Text> { this.state.isConnected ? "Connected" : "Disconnect. Please pull to connect"} </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   _renderWeportT1() {
     return (
       <View style={viewStyles.container}>
+        { this._renderConnectStatus() }
         <Image source={WEPORT_T1_IMG} width={Dimensions.get('window').width}/>
         {this._renderBattery()}
+        {this._renderVersion()}
         {this._renderBluetoothName()}
       </View>
     )

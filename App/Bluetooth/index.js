@@ -74,21 +74,23 @@ export default class App extends Component {
 
     async requestLocationPermission() {
         try {
+          if (Platform.OS == 'android') {
             const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-                {
-                    title: t("bluetooth.locationPermissions"),
-                    message: t("bluetooth.locationPermissionsMsg"),
-                    buttonNeutral: t("bluetooth.askLater"),
-                    buttonNegative: t("global.cancel"),
-                    buttonPositive: t("global.ok"),
-                },
+              PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+              {
+                title: t("bluetooth.locationPermissions"),
+                message: t("bluetooth.locationPermissionsMsg"),
+                buttonNeutral: t("bluetooth.askLater"),
+                buttonNegative: t("global.cancel"),
+                buttonPositive: t("global.ok"),
+              },
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log('You can use the ACCESS_COARSE_LOCATION');
+              console.log('You can use the ACCESS_COARSE_LOCATION');
             } else {
-                console.log('ACCESS_COARSE_LOCATION permission denied');
+              console.log('ACCESS_COARSE_LOCATION permission denied');
             }
+          }
         } catch (err) {
             console.warn(err);
         }
@@ -436,11 +438,11 @@ export default class App extends Component {
             console.log(deviceData);
             storage.save("boundDevices",deviceData);
             // this.alert(t('bluetooth.boundSuccess'))
-          BluetoothManager.disconnect()
-
-          // go back to Device page and refresh
-          this.props.navigation.state.params.callback('callback debug data')
-          this.props.navigation.goBack()
+          BluetoothManager.disconnect().then(res => {
+            // go back to Device page and refresh
+            this.props.navigation.state.params.callback('callback debug data');
+            this.props.navigation.goBack()
+          });
         });
 
     }
