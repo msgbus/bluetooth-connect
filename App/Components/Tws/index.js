@@ -61,9 +61,6 @@ export default class TwsT1 extends React.Component {
     this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
     this.deviceMap = new Map();
 
-
-    global.BluetoothManager = new BleModule();
-
     const { device } = this.props
 
     // this.connect(device)
@@ -82,7 +79,6 @@ export default class TwsT1 extends React.Component {
   }
 
   componentWillUnmount() {
-    BluetoothManager.destroy();
     this.onStateChangeListener && this.onStateChangeListener.remove();
     this.disconnectListener && this.disconnectListener.remove();
     this.monitorListener && this.monitorListener.remove();
@@ -90,7 +86,6 @@ export default class TwsT1 extends React.Component {
 
   disconstructor() {
     this.ble.disconnect()
-    this.ble.destroy()
   }
 
   scan(){
@@ -343,8 +338,6 @@ export default class TwsT1 extends React.Component {
     console.log("tws render")
     // if (this.state.isConnected == false) {
     //   // BluetoothManager.disconnect();
-    //   BluetoothManager.destroy();
-    //   BluetoothManager = new BleModule();
 
     // if (this.state.battery == "") {
       if (!this.scaning) { this.scan() }

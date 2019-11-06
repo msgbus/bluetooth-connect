@@ -189,7 +189,7 @@ export default class BleModule{
     disconnect(){
       return new Promise( (resolve, reject) =>{
         this.isConnecting = false;
-        
+
         this.manager.cancelDeviceConnection(this.peripheralId)
                 .then(res=>{
                     console.log('disconnect success',res);
@@ -238,9 +238,9 @@ export default class BleModule{
         // return new Promise( (resolve, reject) =>{
             this.manager.writeCharacteristicWithResponseForDevice(this.peripheralId,"66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777",Buffer.from(bytes).toString('base64'),transactionId)
                 .then(characteristic=>{                    
-                    console.log('write success',value);
-                    console.log(characteristic.value)
-                    resolve(characteristic);
+                    console.log('write success',characteristic.value);
+                    // console.log(characteristic.value)
+                    // resolve(characteristic);
                 },error=>{
                     console.log('write fail: ',error);
                     this.disconnect()
