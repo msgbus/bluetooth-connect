@@ -46,7 +46,7 @@
     "setupCurrentDevice":"是否设置当前设备为默认设备",
     "setupSuccess":"设置成功！"
   },
-  "blueTooth":{
+  "bluetooth":{
     "title":"添加设备",
     "openBt":"请打开手机蓝牙后再搜索",
     "modifySuccess":"修改成功，请重启耳机！",
@@ -67,6 +67,8 @@
     "modifyDeviceNameSuccess":"设备修改成功!",
     "boundSuccess":"绑定成功！",
     "loading":"获取中...",
-    "modifying":"修改中..."
+    "modifying":"修改中...",
+    "main":"主",
+    "secondary":"副"
   }
 }

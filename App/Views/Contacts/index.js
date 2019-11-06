@@ -123,7 +123,7 @@ export default class HomeScreen extends React.Component {
                     onPress={()=>{this.addDevice()}}
                     style={viewStyles.addDeviceButtonView}>
                     <View style={{justifyContent: "center", alignItems: "center", textAlign:'center'}}>
-                        <AwesomeIcon name='ios-add-circle-outline' style={{fontSize: 100, color:"#CCC"}}/>
+                        <AwesomeIcon name='ios-add-circle-outline' style={{fontSize: 80, color:"#CCC"}}/>
                         {/*<Text style={{color:'black',flex:1,justifyContent: "center", alignItems: "center", textAlign:'center',fontWeight:'bold'}}>{"add"}</Text>*/}
                     </View>
                 </TouchableOpacity>
@@ -167,7 +167,7 @@ export default class HomeScreen extends React.Component {
                     onPress={()=>{this.rmDevice(item)}}
                      style={[viewStyles.itemFontView,{flex:1}]}>
                     <View style={{justifyContent: "center", alignItems: "center", textAlign:'center',marginTop:5}}>
-                        <AwesomeIcon name='ios-remove-circle-outline' style={{fontSize: 60, color:"#C55"}}/>
+                        <AwesomeIcon name='ios-remove-circle-outline' style={{fontSize: 50, color:"#C55"}}/>
                     </View>
                 </TouchableOpacity>
             </View>
