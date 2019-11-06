@@ -51,6 +51,14 @@ export default class HomeScreen extends React.Component {
       //   }
       // },
       {
+          title: t('settings.userManual'),
+          awesomeIcon: 'book',
+          color: '#63d',
+          onPress() {
+              this.props.navigation.navigate('UserManual')
+          }
+      },
+      {
         title: t('settings.about'),
         icon: 'about1',
         color: '#fc3',
@@ -74,7 +82,12 @@ export default class HomeScreen extends React.Component {
                 bottomDivider
                 title={item.title}
                 onPress={item.onPress.bind(this)}
-                leftIcon={<Icon style={{ marginTop: 4 }} name={item.icon} color={item.color}/>}
+                leftIcon={
+                  (item.awesomeIcon)?
+                      <AwesomeIcon name={item.awesomeIcon} style={{marginTop:4,fontSize: 20,marginHorizontal:4}} color={item.color}/>
+                  :
+                      <Icon style={{ marginTop: 4 }} name={item.icon} color={item.color}/>
+                }
               />
             </View>
           ))
