@@ -17,6 +17,7 @@ import MessageScreen from '@Views/Message'
 import PostScreen from '@Views/Post'
 import BluetoothScreen from '../Bluetooth'
 import AwesomeIcon from 'react-native-vector-icons/Ionicons'
+import UserManualScreen from "@Views/UserManual"
 
 import {
   View,
@@ -91,8 +92,9 @@ const AppStack = createStackNavigator({
   Language: { screen: LanguageScreen },
   Feedback: { screen: FeedbackScreen },
   Devices: { screen: MessageScreen },
-  Post: { screen: PostScreen }
-  , Bluetooth: { screen: BluetoothScreen }
+  Post: { screen: PostScreen },
+  Bluetooth: { screen: BluetoothScreen },
+  UserManual:{screen: UserManualScreen}
 }, {
   headerMode: 'none',
 })
