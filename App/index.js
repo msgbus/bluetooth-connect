@@ -14,8 +14,12 @@ import {
 } from 'react-native'
 
 import AppContainer from './Navigator'
+import BleModule from "./Bluetooth/BleModule";
 
 const store = configStore()
+
+global.BluetoothManager = new BleModule();
+
 
 export default class App extends React.Component {
   constructor(props) {

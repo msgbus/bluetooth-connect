@@ -46,8 +46,6 @@ export default class App extends Component {
         }
         this.bluetoothReceiveData = [];  //蓝牙接收的数据缓存
         this.deviceMap = new Map();
-
-        global.BluetoothManager = new BleModule();
     }
 
     componentDidMount(){
@@ -63,7 +61,6 @@ export default class App extends Component {
     }     
 
     componentWillUnmount() {
-       BluetoothManager.destroy();
        this.onStateChangeListener && this.onStateChangeListener.remove();
        this.disconnectListener && this.disconnectListener.remove();
        this.monitorListener && this.monitorListener.remove();
