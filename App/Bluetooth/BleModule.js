@@ -192,7 +192,7 @@ export default class BleModule{
 
         this.manager.cancelDeviceConnection(this.peripheralId)
                 .then(res=>{
-                    console.log('disconnect success',res);
+                    console.log('disconnect success');
                     resolve(res);
                 })
                 .catch(err=>{

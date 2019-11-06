@@ -47,7 +47,7 @@ import AwesomeIcon from 'react-native-vector-icons/Ionicons'
 })
 
 @connect(state => ({
-  refreshing: state.home.refreshing
+  refreshing: state.home.refreshHome
 }), {
   updateRefreshHome
 })
@@ -117,9 +117,14 @@ export default class HomeScreen extends React.Component {
     this.monitorListener && this.monitorListener.remove();
   }
 
+  componentDidUpdate(preProps) {
+    if (this.props.refreshing) {
+      this.props.updateRefreshHome(false)
+      this.onRefresh();
+    }
+  }
+
   disconstructor() {
-    this.ble.disconnect()
-    this.ble.destroy()
   }
 
   scan(){
@@ -170,9 +175,12 @@ export default class HomeScreen extends React.Component {
     BluetoothManager.connect(device.deviceId)
       .then(device=>{
         // this.setState({deviceName:item.item.name,deviceId:item.item.id});
+        this.setState({isConnected:true});
         this.onDisconnect();
         this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
         this.checkBattery()
+      }, err => {
+        this.setState({isConnected: false, refreshing: false})
       })
       .catch(err=>{
         console.log('tws connect failed', err);
@@ -225,6 +233,7 @@ export default class HomeScreen extends React.Component {
       (error, characteristic) => {
         if (error) {
           console.log('monitor fail:',error);
+          this.setState({ refreshing: false, isConnected: false })
         }else{
           this.bluetoothReceiveData.push(characteristic.value); //数据量多的话会分多次接收
           console.log('monitor success',characteristic.value);
@@ -295,6 +304,7 @@ export default class HomeScreen extends React.Component {
     this.disconnectListener = BluetoothManager.manager.onDeviceDisconnected(BluetoothManager.peripheralId,(error,device)=>{
       if(error){  //蓝牙遇到错误自动断开
         console.log('onDeviceDisconnected','device disconnect',error);
+        this.setState({data:[...this.deviceMap.values()],isConnected:false});
       }else{
         this.disconnectListener && this.disconnectListener.remove();
         console.log('onDeviceDisconnected','device disconnect',device.id,device.name);
@@ -306,8 +316,15 @@ export default class HomeScreen extends React.Component {
   disconnect(){
     BluetoothManager.disconnect()
       .then(res=>{
+        this.setState({data:[...this.deviceMap.values()],isConnected:false});
+        this.scan()
+      }, err=> {
+        BluetoothManager.destroy();
+        global.BluetoothManager = new BleModule();
+        this.scan()
       })
       .catch(err=>{
+        this.setState({data:[...this.deviceMap.values()],isConnected:false});
       })
   }
 
@@ -414,7 +431,8 @@ export default class HomeScreen extends React.Component {
     this.setState({ refreshing: true });
     // In actual case set refreshing to false when whatever is being refreshed is done!
 
-    console.log("onRefresh")
+    console.log("home onRefresh")
+    console.log("props", this.props.refreshing);
 
     this._getDevice()
 
@@ -429,8 +447,10 @@ export default class HomeScreen extends React.Component {
   };
 
   _renderDevice () {
-    console.log("device", this.state.device)
+    console.log("render device", this.state.device)
     if (this.state.device != "") {
+      { this._renderConnectStatus() }
+
       if (this.state.device.type == "Weport T1") {
         return (
           this._renderWeportT1()
@@ -440,6 +460,14 @@ export default class HomeScreen extends React.Component {
       return (
           <Text>Please add device</Text>
         )
+    }
+  }
+
+  _renderConnectStatus() {
+    if (!this.state.isConnected) {
+      return (
+        <View><Text>Pull to connect and refresh</Text></View>
+      )
     }
   }
 

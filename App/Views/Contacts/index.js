@@ -5,7 +5,7 @@ import styles from '@Styles'
 import t from '@Localize'
 import ListTitle from '@Components/ListTitle'
 import EmptyBox from '@Components/EmptyBox'
-import { fetchContacts } from '@Store/Actions'
+import { fetchContacts, updateRefreshHome } from '@Store/Actions'
 import { getRemoteAvatar } from '@Utils'
 import HeaderButton from '@Components/HeaderButton'
 import {Text,Button,Picker,FlatList,TouchableOpacity,Alert,Image} from 'react-native'
@@ -34,7 +34,7 @@ import Icon from "../../Components/Icon";
   fetchContacts
 })
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
       const { params = {} } = navigation.state
       const onPressRightButtonFunc = params.addDevice || function() {}
@@ -57,7 +57,8 @@ export default class HomeScreen extends React.Component {
       this.props.navigation.navigate('Bluetooth', {
           callback: (data) => {
               console.log(data); // 打印值为：'回调参数'
-              this.getBoundDevices();
+              this._onRefresh();
+              this.props.updateRefreshHome(true)
           }
       })
   }
@@ -206,6 +207,7 @@ export default class HomeScreen extends React.Component {
                             Toast.hide(toast);
                         }, 1000);
                         this.getBoundDevices();
+                        this.props.updateRefreshHome(true)
                     }
                 }
             ]
@@ -239,6 +241,8 @@ export default class HomeScreen extends React.Component {
               [
                   {text: t("global.cancel")},
                   {text: t("global.ok"), onPress: () => {
+                    BluetoothManager.disconnect();
+
                           if (item.index >= 0 && item.index <= this.state.devices.length)
                           {
                               var deviceInfo = this.state.devices;
@@ -260,7 +264,8 @@ export default class HomeScreen extends React.Component {
                               setTimeout(function () {
                                   Toast.hide(toast);
                               }, 1000);
-                                this.getBoundDevices();
+                              this.getBoundDevices();
+                              this.props.updateRefreshHome(true);
                           }
                       }
                   }
@@ -270,6 +275,18 @@ export default class HomeScreen extends React.Component {
 
     }
 }
+
+const mapStateToProps = state => {
+  return {
+    refreshHome: state.refreshHome
+  }
+};
+
+const mapDispatchToProps = {
+  updateRefreshHome
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const viewStyles = StyleSheet.create({
   container: {

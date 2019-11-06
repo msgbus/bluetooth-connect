@@ -43,13 +43,14 @@ export default handleActions({
     }
   },
   [types.REFRESH_HOME] (state, action) {
+    console.log("reducer home", state, action)
     return {
       ...state,
-      refreshing: action.payload
+      refreshHome: action.payload
     }
   }
 }, {
   timeline: [],
   updateDevice: false,
-  refreshing: false
+  refreshHome: false
 })

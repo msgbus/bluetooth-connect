@@ -61,6 +61,7 @@ export default class App extends Component {
     }     
 
     componentWillUnmount() {
+        BluetoothManager.disconnect()
        this.onStateChangeListener && this.onStateChangeListener.remove();
        this.disconnectListener && this.disconnectListener.remove();
        this.monitorListener && this.monitorListener.remove();
@@ -293,28 +294,50 @@ export default class App extends Component {
     }
 
     renderHeader=()=>{
-        return(
-            <View style={styles.container}>        
-                <View style={{marginTop:20}}>
-                    <TouchableOpacity 
-                        activeOpacity={0.7}
-                        style={styles.buttonView}
-                        onPress={this.state.isConnected ? this.disconnect.bind(this) : this.scan.bind(this)}>
-                        <Text style={styles.buttonText}>{this.state.scaning?t('bluetooth.searching'):this.state.isConnected?t('bluetooth.disconnectBt'):t('bluetooth.searchBt')}</Text>
-                    </TouchableOpacity>
-                    
-                    <Text style={{marginLeft:10,marginTop:10}}>
-                        {this.state.isConnected?t('bluetooth.currentDevice'):t('bluetooth.availableDevice')}
-                    </Text>
-                </View>
+        if (this.state.isConnected) {
+            return (
+              <View style={{ marginTop: 50 }}>
+              </View>
+              )
+        }
+        if (this.state.isConnected) {
+          return(
+            <View style={{ marginTop: 50 }}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.buttonView}
+                  onPress={this.state.isConnected ? this.disconnect.bind(this) : this.scan.bind(this)}>
+                  <Text style={styles.buttonText}>{this.state.scaning?t('bluetooth.searching'):this.state.isConnected?t('bluetooth.disconnectBt'):t('bluetooth.searchBt')}</Text>
+                </TouchableOpacity>
+                <Text style={{marginLeft:10}}>
+                  { t('bluetooth.currentDevice') }
+                </Text>
             </View>
-        )
+          )
+        } else {
+          return(
+            <View style={styles.container}>
+              <View style={{marginTop:20}}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.buttonView}
+                  onPress={this.state.isConnected ? this.disconnect.bind(this) : this.scan.bind(this)}>
+                  <Text style={styles.buttonText}>{this.state.scaning?t('bluetooth.searching'):this.state.isConnected?t('bluetooth.disconnectBt'):t('bluetooth.searchBt')}</Text>
+                </TouchableOpacity>
+                <Text style={{marginLeft:10,marginTop:10}}>
+                  { t('bluetooth.availableDevice') }
+                </Text>
+              </View>
+            </View>
+          )
+        }
     }
 
     renderFooter=()=>{
         return(
-            <View style={{marginBottom:30}}>
-                {this.state.isConnected?
+            <View style={{marginTop: 100, marginBottom:30}}>
+                {
+                    this.state.isConnected?
                 <View>
                     {/*{this.renderWriteView('写数据(write)：','发送',*/}
                             {/*BluetoothManager.writeWithResponseCharacteristicUUID,this.write)}*/}
@@ -324,65 +347,6 @@ export default class App extends Component {
                             {/*BluetoothManager.readCharacteristicUUID,this.read,this.state.readData)}*/}
                     {/*{this.renderReceiveView(`监听接收的数据：${this.state.isMonitoring?'监听已开启':'监听未开启'}`,'开启监听',*/}
                             {/*BluetoothManager.nofityCharacteristicUUID,this.monitor,this.state.receiveData)}*/}
-                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
-                        <View style={{flex: 2}}>
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonView}
-                                onPress={() => {
-                                    this.checkBattery();
-                                }
-                                }>
-                                <Text style={styles.buttonText}>{t('bluetooth.queryPower')}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{flex: 3, alignItems:"center", justifyContent:"center", marginTop:10}}>
-                            <Text>{this.state.battery}</Text>
-                        </View>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
-                        <View style={{flex: 2}}>
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonView}
-                                onPress={() => {
-                                    this.checkVersion();
-                                }
-                                }>
-                                <Text style={styles.buttonText}>{t('bluetooth.queryVersion')}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{flex: 3, alignItems:"center", justifyContent:"center", marginTop:10}}>
-                            <Text>{this.state.version}</Text>
-                        </View>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
-                        <View style={{flex: 1}}>
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonView}
-                                onPress={() => {
-                                    this.setState({isDialogVisible: true});
-                                }
-                                }>
-                                <Text style={styles.buttonText}>{t("bluetooth.modifyBtName")}</Text>
-                                <DialogInput
-                                    isDialogVisible={this.state.isDialogVisible}
-                                    title={t("bluetooth.modifyBtName")}
-                                    message={t("bluetooth.inputBtName")}
-                                    // hintInput ={this.state.data[1]}
-                                    cancelText={t("global.cancel")}
-                                    submitText={t("global.ok")}
-                                    submitInput={ (inputText) => {this.changeBroatcastName(inputText);
-                                        this.setState({isDialogVisible: false}) }}
-                                    closeDialog={ () => {this.setState({isDialogVisible: false});
-                                    }}>
-                                </DialogInput>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row', marginHorizontal:10}}>
-                        <View style={{flex: 1}}>
                             <TouchableOpacity
                                 activeOpacity={0.7}
                                 style={styles.buttonView}
@@ -392,10 +356,9 @@ export default class App extends Component {
                                 }>
                                 <Text style={styles.buttonText}>{t("bluetooth.boundDevice")}</Text>
                             </TouchableOpacity>
-                        </View>
-                    </View>
                 </View>
-                :<View style={{marginBottom:20}}></View>
+                :
+                  <View style={{marginBottom:20}}></View>
                 }        
             </View>
         )
@@ -448,7 +411,12 @@ export default class App extends Component {
 
             console.log(deviceData);
             storage.save("boundDevices",deviceData);
-            this.alert(t('bluetooth.boundSuccess'))
+            // this.alert(t('bluetooth.boundSuccess'))
+          BluetoothManager.disconnect()
+
+          // go back to Device page and refresh
+          this.props.navigation.state.params.callback('callback debug data')
+          this.props.navigation.goBack()
         });
 
     }

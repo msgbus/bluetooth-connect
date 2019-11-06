@@ -7,7 +7,7 @@ export const appendTimeline = createAction(types.APPEND_TIMELINE)
 export const prependTimeline = createAction(types.PREPEND_TIMELINE)
 export const updatePost = createAction(types.UPDATE_POST)
 export const updateDevice = createAction(types.UPDATE_DEVICE)
-export const refreshHome = createAction(types.REFRESH_HOME)
+export const refreshHomeAction = createAction(types.REFRESH_HOME)
 
 export function fetchTimeline() {
   return (dispatch) => {
@@ -38,6 +38,6 @@ export function refreshDevice() {
 
 export function updateRefreshHome(refreshing) {
   return (dispatch) => {
-    dispatch(refreshHome(refreshing))
+    dispatch(refreshHomeAction(refreshing))
   }
 }
