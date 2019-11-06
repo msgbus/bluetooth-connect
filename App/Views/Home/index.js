@@ -7,6 +7,7 @@ import {decode as atob, encode as btoa} from 'base-64'
 import HeaderButton from '@Components/HeaderButton'
 import Post from '@Components/Post'
 import { fetchUserInfo, fetchTimeline, refreshTimeline, loadMoreTimeline, setModalVisibleStatus, refreshDevice, updateRefreshHome } from '@Store/Actions'
+import DialogInput from 'react-native-dialog-input';
 
 import {
   View,
@@ -19,7 +20,8 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
-  Dimensions
+  Dimensions,
+    Alert
 } from 'react-native'
 
 import storage from '@Utils/storage'
@@ -30,6 +32,7 @@ import Image from 'react-native-scalable-image'
 import WEPORT_T1_IMG from '@assets/Weport-T1.jpg'
 import WEPORT_T1_OPEN_IMG from '@assets/Weport-T1-open.jpg'
 import AwesomeIcon from 'react-native-vector-icons/Ionicons'
+import {RRCLoading} from "react-native-overlayer/src/index";
 
 @connect(state => ({
   timeline: state.home.timeline
@@ -64,14 +67,16 @@ export default class HomeScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
+    // this.isDialogVisible=false
+      this.newDeviceName = "";
     this.state = {
       refreshing: this.props.refreshing,
       loading: false,
       loadedEnd: false,
       loadResultOpacity: new Animated.Value(0),
       device: "",
-
+      isDialogVisible:false,
       scaning:false,
       isConnected:false,
       text:'',
@@ -86,7 +91,6 @@ export default class HomeScreen extends React.Component {
       version:"",
       versionR: "",
       versionL: "",
-      isDialogVisible: false,
       deviceName:"",
       deviceId:""
     }
@@ -203,7 +207,6 @@ export default class HomeScreen extends React.Component {
 
   write=(bytes)=>{
     // if(this.state.text.length == 0){
-    //     this.alert('请输入消息');
     //     return;
     // }
     BluetoothManager.write(bytes)
@@ -217,7 +220,6 @@ export default class HomeScreen extends React.Component {
 
   writeWithoutResponse=(index,type)=>{
     if(this.state.text.length == 0){
-      this.alert('请输入消息');
       return;
     }
     BluetoothManager.writeWithoutResponse(this.state.text,index,type)
@@ -298,12 +300,61 @@ export default class HomeScreen extends React.Component {
   setBroadcastNameResp(bytesbuf){
     if (bytesbuf.length == 6 && bytesbuf[0] == 200 && bytesbuf[1] == 2 ){
       if (bytesbuf[3] == 0) {
-        this.alert("修改成功");
+        this.setState({deviceName:this.newDeviceName})
+          this.boundDevice()
       } else {
-        this.alert("修改失败");
+        Alert.alert("修改失败");
       }
     }
   }
+    boundDevice = async () => {
+        await storage.get('boundDevices').then(value=>{
+            console.log("get bound value:",value);
+            console.log("bound device:",this.state.deviceName,this.state.deviceId);
+
+
+            var deviceArr = [];
+            var currentIndex = 0;
+            if (value != null){
+                deviceArr = value.deviceArray;
+                var currentIndex = value.currentIndex;
+            }
+
+            var deviceInfo = {
+                name: this.state.deviceName,
+                type: 'Weport T1',
+                deviceId: this.state.deviceId
+            };
+
+            for (var i = 0; i<deviceArr.length; i++) {
+                if ((this.state.deviceId == deviceArr[i].deviceId) && (this.state.deviceName == deviceArr[i].name)) {
+                    return
+                } else {
+                    if (this.state.deviceId == deviceArr[i].deviceId){
+                        deviceArr[i].name = this.state.deviceName;
+                        const deviceData = {
+                            deviceArray: deviceArr,
+                            currentIndex:currentIndex
+                        };
+
+                        console.log(deviceData);
+                        storage.save("boundDevices",deviceData);
+                        return
+                    }
+                }
+            }
+            deviceArr.push(deviceInfo);
+            console.log("deviceInfo lenth",deviceArr.length);
+            const deviceData = {
+                deviceArray: deviceArr,
+                currentIndex:currentIndex
+            };
+
+            console.log(deviceData);
+            storage.save("boundDevices",deviceData);
+        });
+
+    }
 
   base64ToArrayBuffer(base64) {
     var binary_string = atob(base64);
@@ -365,6 +416,7 @@ export default class HomeScreen extends React.Component {
     bytes.push(0);
     console.log(bytes);
     BluetoothManager.write(bytes)
+      this.newDeviceName = name;
   }
   convertStringToByteArray(str){
     String.prototype.encodeHex = function () {
@@ -435,17 +487,47 @@ export default class HomeScreen extends React.Component {
   }
 
   _renderBluetoothName() {
+
+      console.log("isDialogVisible",this.state.isDialogVisible);
+
     return (
       <View style={viewStyles.tools}>
-        <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
+        <TouchableOpacity
+            activeOpacity={0.7}
+            style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}
+            onPress={
+                this.setDialogVisible.bind(this)
+            }
+        >
           <View style={viewStyles.toolItem}>
             <Text>{ this.state.deviceName }</Text>
+              <DialogInput
+                  isDialogVisible={this.state.isDialogVisible}
+                  title={t("bluetooth.modifyBtName")}
+                  message={t("bluetooth.inputBtName")}
+                  // hintInput ={this.state.data[1]}
+                  cancelText={t("global.cancel")}
+                  submitText={t("global.ok")}
+                  submitInput={ (inputText) => {
+                      this.changeBroatcastName(inputText);
+                      this.setState({isDialogVisible : false})
+                  }
+                  }
+                  closeDialog={ () => {
+                      this.setState({isDialogVisible : false})
+                    }
+                  }
+              >
+              </DialogInput>
           </View>
         </TouchableOpacity>
       </View>
     )
   }
 
+  setDialogVisible(){
+      this.setState({isDialogVisible : true})
+  }
   render() {
     return (
       <ScrollView
