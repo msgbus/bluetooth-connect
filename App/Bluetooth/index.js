@@ -81,7 +81,7 @@ export default class App extends Component {
                 if (error) {
                     console.log('startDeviceScan error:',error)
                     if(error.errorCode == 102){
-                        this.alert(t("blueTooth.openBt"));
+                        this.alert(t("bluetooth.openBt"));
                     }
                     this.setState({scaning:false});   
                 }else{
@@ -104,7 +104,7 @@ export default class App extends Component {
     }
    
     connect(item){
-        const options = {  text: t('blueTooth.connecting') };
+        const options = {  text: t('bluetooth.connecting') };
         RRCLoading.setLoadingOptions(options);
         RRCLoading.show();
 
@@ -133,7 +133,7 @@ export default class App extends Component {
             .catch(err=>{
                 newData[item.index].isConnecting = false;
                 this.setState({data:[...newData]});
-                this.alert(t('blueTooth.connectFail'));
+                this.alert(t('bluetooth.connectFail'));
                 RRCLoading.hide();
             })
     }
@@ -224,8 +224,8 @@ export default class App extends Component {
     getVersion(bytesbuf){
         if(bytesbuf.length == 14 && bytesbuf[0] == 201 && bytesbuf[1] == 2){
             if (bytesbuf[4] == 8){
-                this.setState({version:"主: ["+bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6]+"]"+"   "
-                                +"副: ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"})
+                this.setState({version:t("bluetooth.main")+": ["+bytesbuf[9]+"."+bytesbuf[8]+"."+bytesbuf[7]+"."+bytesbuf[6]+"]"+"   "
+                                +t("bluetooth.secondary")+": ["+bytesbuf[13]+"."+bytesbuf[12]+"."+bytesbuf[11]+"."+bytesbuf[10]+"]"})
             }
         }
         RRCLoading.hide();
@@ -235,9 +235,9 @@ export default class App extends Component {
         RRCLoading.hide();
         if (bytesbuf.length == 6 && bytesbuf[0] == 200 && bytesbuf[1] == 2 ){
             if (bytesbuf[3] == 0) {
-                this.alert(t("blueTooth.modifySuccess"));
+                this.alert(t("bluetooth.modifySuccess"));
             } else {
-                this.alert(t("blueTooth.modifyFail"));
+                this.alert(t("bluetooth.modifyFail"));
             }
         }
     }
@@ -287,7 +287,7 @@ export default class App extends Component {
                 style={styles.item}>                         
                 <View style={{flexDirection:'row', marginTop: 10, marginLeft: 10}}>
                     <Text style={{color:'black'}}>{data.name?data.name:''}</Text>
-                    {/*<Text style={{color:"red",marginLeft:50}}>{data.isConnecting?t('blueTooth.connecting'):''}</Text>*/}
+                    {/*<Text style={{color:"red",marginLeft:50}}>{data.isConnecting?t('bluetooth.connecting'):''}</Text>*/}
                 </View>
                 <Text style={{marginLeft:10}}>{data.id}</Text>
 
@@ -303,11 +303,11 @@ export default class App extends Component {
                         activeOpacity={0.7}
                         style={styles.buttonView}
                         onPress={this.state.isConnected ? this.disconnect.bind(this) : this.scan.bind(this)}>
-                        <Text style={styles.buttonText}>{this.state.scaning?t('blueTooth.searching'):this.state.isConnected?t('blueTooth.disconnectBt'):t('blueTooth.searchBt')}</Text>
+                        <Text style={styles.buttonText}>{this.state.scaning?t('bluetooth.searching'):this.state.isConnected?t('bluetooth.disconnectBt'):t('bluetooth.searchBt')}</Text>
                     </TouchableOpacity>
                     
                     <Text style={{marginLeft:10,marginTop:10}}>
-                        {this.state.isConnected?t('blueTooth.currentDevice'):t('blueTooth.availableDevice')}
+                        {this.state.isConnected?t('bluetooth.currentDevice'):t('bluetooth.availableDevice')}
                     </Text>
                 </View>
             </View>
@@ -336,7 +336,7 @@ export default class App extends Component {
                                     this.checkBattery();
                                 }
                                 }>
-                                <Text style={styles.buttonText}>{t('blueTooth.queryPower')}</Text>
+                                <Text style={styles.buttonText}>{t('bluetooth.queryPower')}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 3, alignItems:"center", justifyContent:"center", marginTop:10}}>
@@ -352,7 +352,7 @@ export default class App extends Component {
                                     this.checkVersion();
                                 }
                                 }>
-                                <Text style={styles.buttonText}>{t('blueTooth.queryVersion')}</Text>
+                                <Text style={styles.buttonText}>{t('bluetooth.queryVersion')}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 3, alignItems:"center", justifyContent:"center", marginTop:10}}>
@@ -368,11 +368,11 @@ export default class App extends Component {
                                     this.setState({isDialogVisible: true});
                                 }
                                 }>
-                                <Text style={styles.buttonText}>{t("blueTooth.modifyBtName")}</Text>
+                                <Text style={styles.buttonText}>{t("bluetooth.modifyBtName")}</Text>
                                 <DialogInput
                                     isDialogVisible={this.state.isDialogVisible}
-                                    title={t("blueTooth.modifyBtName")}
-                                    message={t("blueTooth.inputBtName")}
+                                    title={t("bluetooth.modifyBtName")}
+                                    message={t("bluetooth.inputBtName")}
                                     // hintInput ={this.state.data[1]}
                                     cancelText={t("global.cancel")}
                                     submitText={t("global.ok")}
@@ -393,7 +393,7 @@ export default class App extends Component {
                                     this.boundDevice();
                                 }
                                 }>
-                                <Text style={styles.buttonText}>{t("blueTooth.boundDevice")}</Text>
+                                <Text style={styles.buttonText}>{t("bluetooth.boundDevice")}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -425,7 +425,7 @@ export default class App extends Component {
             
             for (var i = 0; i<deviceArr.length; i++) {
                 if ((this.state.deviceId == deviceArr[i].deviceId) && (this.state.deviceName == deviceArr[i].name)) {
-                    this.alert(t("blueTooth.alreadyBoundDevice"));
+                    this.alert(t("bluetooth.alreadyBoundDevice"));
                     return
                 } else {
                     if (this.state.deviceId == deviceArr[i].deviceId){
@@ -437,7 +437,7 @@ export default class App extends Component {
 
                         console.log(deviceData);
                         storage.save("boundDevices",deviceData);
-                        this.alert(t('blueTooth.modifyDeviceNameSuccess'));
+                        this.alert(t('bluetooth.modifyDeviceNameSuccess'));
                         return
                     }
                 }
@@ -451,13 +451,13 @@ export default class App extends Component {
 
             console.log(deviceData);
             storage.save("boundDevices",deviceData);
-            this.alert(t('blueTooth.boundSuccess'))
+            this.alert(t('bluetooth.boundSuccess'))
         });
 
     }
     changeBroatcastName(name) {
 
-        const options = {  text: t('blueTooth.modifying') };
+        const options = {  text: t('bluetooth.modifying') };
         RRCLoading.setLoadingOptions(options);
         RRCLoading.show();
         console.log("change name:",name)
@@ -494,7 +494,7 @@ export default class App extends Component {
     }
 
     checkBattery(){
-        const options = {  text: t('blueTooth.loading') };
+        const options = {  text: t('bluetooth.loading') };
         RRCLoading.setLoadingOptions(options);
         RRCLoading.show();
         // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
@@ -508,7 +508,7 @@ export default class App extends Component {
     }
     checkVersion(){
 
-        const options = {  text: t('blueTooth.loading') };
+        const options = {  text: t('bluetooth.loading') };
         RRCLoading.setLoadingOptions(options);
         RRCLoading.show();
         // this.monitor("66666666-6666-6666-6666-666666666666","77777777-7777-7777-7777-777777777777");
@@ -530,7 +530,7 @@ export default class App extends Component {
                     leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => {
                         this.props.navigation.state.params.callback('callback debug data');
                         this.props.navigation.goBack() } }/>}
-                    centerComponent={{ text: t("blueTooth.title"), style: styles.modalHeader.center }}
+                    centerComponent={{ text: t("bluetooth.title"), style: styles.modalHeader.center }}
                     containerStyle={{
                     backgroundColor: config.mainColor,
                     }}

@@ -45,7 +45,7 @@
     "setupCurrentDevice":"Whether to set the current device as the default device?",
     "setupSuccess":"set Successed！"
   },
-  "blueTooth": {
+  "bluetooth": {
     "title": "Add Device",
     "openBt": "Please open your phone Bluetooth and search again!",
     "modifySuccess": "Modify successed, please restart the earphone!",
@@ -66,6 +66,8 @@
     "modifyDeviceNameSuccess": "The device name was successfully modified.",
     "boundSuccess": "Bound successed!",
     "loading":"loading...",
-    "modifying":"modifying..."
+    "modifying":"modifying...",
+    "main":"M",
+    "secondary":"S"
   }
 }
