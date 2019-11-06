@@ -310,10 +310,10 @@ export default class App extends Component {
                 onPress={()=>{this.connect(item)}}
                 style={styles.item}>                         
                 <View style={{flexDirection:'row', marginTop: 10, marginLeft: 10}}>
-                    <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>{data.name?data.name:''}</Text>
+                    <Text style={{color:'black',fontSize:18,fontWeight:'bold', textAlign:'center'}}>{data.name?data.name:''}</Text>
                     {/*<Text style={{color:"red",marginLeft:50}}>{data.isConnecting?t('bluetooth.connecting'):''}</Text>*/}
                 </View>
-                <Text style={{marginLeft:10}}>{data.id}</Text>
+                <Text style={{marginLeft:10, marginTop: 10}}>{data.id}</Text>
 
             </TouchableOpacity>
         );
@@ -361,7 +361,7 @@ export default class App extends Component {
 
     renderFooter=()=>{
         return(
-            <View style={{marginTop: 100, marginBottom:30}}>
+            <View style={{marginTop: 400, marginBottom:30}}>
                 {
                     this.state.isConnected?
                 <View>
@@ -373,15 +373,6 @@ export default class App extends Component {
                             {/*BluetoothManager.readCharacteristicUUID,this.read,this.state.readData)}*/}
                     {/*{this.renderReceiveView(`监听接收的数据：${this.state.isMonitoring?'监听已开启':'监听未开启'}`,'开启监听',*/}
                             {/*BluetoothManager.nofityCharacteristicUUID,this.monitor,this.state.receiveData)}*/}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonView}
-                                onPress={() => {
-                                    this.boundDevice();
-                                }
-                                }>
-                                <Text style={styles.buttonText}>{t("bluetooth.boundDevice")}</Text>
-                            </TouchableOpacity>
                 </View>
                 :
                   <View style={{marginBottom:20}}></View>
@@ -516,7 +507,7 @@ export default class App extends Component {
 
     render () {
         return (
-            <View style={styles.container}>  
+            <View style={styles.container}>
                 <Header
                     leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => {
                         this.props.navigation.state.params.callback('callback debug data');
@@ -526,16 +517,45 @@ export default class App extends Component {
                     backgroundColor: config.mainColor,
                     }}
                 />
-                <FlatList
-                    renderItem={this.renderItem}
-                    keyExtractor={item=>item.id}
-                    data={this.state.data}
-                    ListHeaderComponent={this.renderHeader}
-                    ListFooterComponent={this.renderFooter}
-                    extraData={[this.state.isConnected,this.state.text,this.state.receiveData,this.state.readData,this.state.writeData,this.state.isMonitoring,this.state.scaning]}
-                    keyboardShouldPersistTaps='handled'
-                    ItemSeparatorComponent={this.renderSeparator}//每行底部---一般写下划线
-                />            
+                  {
+                    this.state.isConnected ?
+                      <View style={{flex: 1}}>
+                          <View style={{flex: 0.9}}>
+                            <FlatList
+                              renderItem={this.renderItem}
+                              keyExtractor={item=>item.id}
+                              data={this.state.data}
+                              ListHeaderComponent={this.renderHeader}
+                              ListFooterComponent={this.renderFooter}
+                              extraData={[this.state.isConnected,this.state.text,this.state.receiveData,this.state.readData,this.state.writeData,this.state.isMonitoring,this.state.scaning]}
+                              keyboardShouldPersistTaps='handled'
+                              ItemSeparatorComponent={this.renderSeparator}//每行底部---一般写下划线
+                            />
+                          </View>
+                          <View style={{flex: 0.1}}>
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={viewStyles.buttonView}
+                              onPress={() => {
+                                this.boundDevice();
+                              }
+                              }>
+                              <Text style={styles.buttonText}>{t("bluetooth.boundDevice")}</Text>
+                            </TouchableOpacity>
+                          </View>
+                      </View>
+                      :
+                    <FlatList
+                      renderItem={this.renderItem}
+                      keyExtractor={item=>item.id}
+                      data={this.state.data}
+                      ListHeaderComponent={this.renderHeader}
+                      ListFooterComponent={this.renderFooter}
+                      extraData={[this.state.isConnected,this.state.text,this.state.receiveData,this.state.readData,this.state.writeData,this.state.isMonitoring,this.state.scaning]}
+                      keyboardShouldPersistTaps='handled'
+                      ItemSeparatorComponent={this.renderSeparator}//每行底部---一般写下划线
+                    />
+                  }
             </View>
         )
     }
@@ -550,4 +570,15 @@ const viewStyles = StyleSheet.create({
   container: {
     ...styles.container,
   },
+  buttonView: {
+    marginRight:10,
+    marginLeft:10,
+    marginTop:10,
+    paddingTop:10,
+    paddingBottom:10,
+    backgroundColor: config.mainColor,
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff'
+  }
 })
