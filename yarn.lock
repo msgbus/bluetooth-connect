@@ -5407,6 +5407,11 @@ react-native-maps@~0.25.0:
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.25.0.tgz#81bc51eb50e33811a9e1c345cc48869413ead67d"
   integrity sha512-PFJuW1pt+HnnnN0m0OGk29RSvICFVkK/DScX6cUk0SuCSN2DAHx0y6y57lZyYXcYqU4J4usNpfxgp/ccjASDiw==
 
+react-native-overlayer@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-overlayer/-/react-native-overlayer-0.2.1.tgz#894a824502eec1af5ba3f7bcf5a03106a2804498"
+  integrity sha512-zxik5v9n3c6jxPb5uBppZfxIGgC/0RxADG9AwsF3KhBybtrW1o2RMmqSmMnXUqEY9ywBgnU62dlbe2uYbQWxPA==
+
 react-native-parsed-text@^0.0.21:
   version "0.0.21"
   resolved "https://registry.yarnpkg.com/react-native-parsed-text/-/react-native-parsed-text-0.0.21.tgz#86cf233aedc7a848b801b674c81d6b5ee37162df"
