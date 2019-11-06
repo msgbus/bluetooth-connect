@@ -506,6 +506,7 @@ export default class HomeScreen extends React.Component {
         })
         this.scan()
       } else {
+        BluetoothManager.disconnect();
         this.setState({
           device: "",
           refreshing: false

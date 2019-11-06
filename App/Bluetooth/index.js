@@ -25,6 +25,7 @@ import {Buffer} from "buffer";
 import DialogInput from 'react-native-dialog-input';
 import storage from '@Utils/storage'
 import { RRCLoading } from 'react-native-overlayer';
+import {PermissionsAndroid} from 'react-native';
 
 export default class App extends Component {
     constructor(props) {
@@ -71,7 +72,30 @@ export default class App extends Component {
         Alert.alert(t("global.tips"),text,[{ text:t("global.ok"),onPress:()=>{ } }]);
     }
 
+    async requestLocationPermission() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+                {
+                    title: t("bluetooth.locationPermissions"),
+                    message: t("bluetooth.locationPermissionsMsg"),
+                    buttonNeutral: t("bluetooth.askLater"),
+                    buttonNegative: t("global.cancel"),
+                    buttonPositive: t("global.ok"),
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You can use the ACCESS_COARSE_LOCATION');
+            } else {
+                console.log('ACCESS_COARSE_LOCATION permission denied');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    }
+
     scan(){
+        this.requestLocationPermission();
         if(!this.state.scaning) {
             this.setState({scaning:true});
             this.deviceMap.clear();
