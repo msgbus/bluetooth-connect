@@ -495,7 +495,7 @@ export default class HomeScreen extends React.Component {
           <View style={viewStyles.tools}>
             <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
               <View style={viewStyles.toolItem}>
-                <Text>Please open the the charging case add your device</Text>
+                <Text>{ t('home.openCase') }</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -510,7 +510,10 @@ export default class HomeScreen extends React.Component {
       <View style={viewStyles.tools}>
         <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
           <View style={viewStyles.toolItem}>
-            <Text> { this.state.isConnected ? "Connected" : "Disconnect. Please pull to connect"} </Text>
+            { this.state.isConnected ?
+              <Text style={{color: '#00f'}}> {t('home.connected')}</Text>
+              :
+              <Text style={{color: '#f00'}}> {t('home.disconnected')} </Text> }
           </View>
         </TouchableOpacity>
       </View>
