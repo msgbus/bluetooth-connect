@@ -21,7 +21,10 @@
   "home": {
     "publisher": "Publisher",
     "publisherPlaceholder": "What's new with you.",
-    "noMorePost": "No Updated Post"
+    "noMorePost": "No Updated Post",
+    "openCase": "Please open the the charging case add your device",
+    "connected": "Connected",
+    "disconnected": "Disconnected. Please pull to connect"
   },
   "settings": {
     "location": "Location",
