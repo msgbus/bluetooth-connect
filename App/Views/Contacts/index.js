@@ -68,7 +68,7 @@ export default class HomeScreen extends React.Component {
         loading: true,
         currentDeviceIndex: -1,
         devices:[],
-        refreshing: true,
+        refreshing: false,
     }
   }
 

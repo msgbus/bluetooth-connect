@@ -286,7 +286,7 @@ export default class App extends Component {
                 onPress={()=>{this.connect(item)}}
                 style={styles.item}>                         
                 <View style={{flexDirection:'row', marginTop: 10, marginLeft: 10}}>
-                    <Text style={{color:'black'}}>{data.name?data.name:''}</Text>
+                    <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>{data.name?data.name:''}</Text>
                     {/*<Text style={{color:"red",marginLeft:50}}>{data.isConnecting?t('bluetooth.connecting'):''}</Text>*/}
                 </View>
                 <Text style={{marginLeft:10}}>{data.id}</Text>
@@ -543,8 +543,14 @@ export default class App extends Component {
                     ListFooterComponent={this.renderFooter}
                     extraData={[this.state.isConnected,this.state.text,this.state.receiveData,this.state.readData,this.state.writeData,this.state.isMonitoring,this.state.scaning]}
                     keyboardShouldPersistTaps='handled'
+                    ItemSeparatorComponent={this.renderSeparator}//每行底部---一般写下划线
                 />            
             </View>
+        )
+    }
+    renderSeparator = ()=> {
+        return (
+            <View style={{height: 1, backgroundColor: 'rgb(200,200,200)',marginHorizontal:8}}/>
         )
     }
 }
