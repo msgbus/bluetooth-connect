@@ -361,7 +361,7 @@ export default class App extends Component {
 
     renderFooter=()=>{
         return(
-            <View style={{marginTop: 400, marginBottom:30}}>
+            <View style={{ marginBottom:30}}>
                 {
                     this.state.isConnected?
                 <View>
