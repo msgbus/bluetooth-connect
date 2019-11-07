@@ -178,6 +178,9 @@ class HomeScreen extends React.Component {
     rmDevice(item) {
       this.state.devices.splice(item.index,1);
       if (item.index == this.state.currentDeviceIndex) {
+          if (BluetoothManager.peripheralId){
+              BluetoothManager.disconnect();
+          }
           this.state.currentDeviceIndex = 0;
       }
 

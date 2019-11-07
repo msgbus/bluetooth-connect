@@ -120,7 +120,7 @@ export default class App extends Component {
                    BluetoothManager.stopScan();
                    this.setState({scaning:false});                   
                 }                
-            }, 2000)  // 5秒后停止搜索
+            }, 3000)  // 3秒后停止搜索
         }else {
             BluetoothManager.stopScan();
             this.setState({scaning:false});

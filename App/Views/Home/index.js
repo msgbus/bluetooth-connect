@@ -144,7 +144,7 @@ export default class HomeScreen extends React.Component {
         if (error) {
           console.log('startDeviceScan error:',error)
           if(error.errorCode == 102){
-            console.log('Please open Bluetooth');
+              Alert.alert(t("global.tips"),t("bluetooth.openBt"),[{ text:t("global.ok"),onPress:()=>{ } }]);
           }
           this.scaning = false
         }else{
@@ -155,6 +155,15 @@ export default class HomeScreen extends React.Component {
           }
         }
       })
+        this.refreshTimer && clearTimeout(this.refreshTimer);
+        this.refreshTimer = setTimeout(()=>{
+            console.log("timeout")
+            if(this.scaning){
+                this.scaning = false
+                BluetoothManager.stopScan();
+            }
+            this.setState({refreshing: false})
+        }, 10000)
       /*
       this.scanTimer && clearTimeout(this.scanTimer);
       this.scanTimer = setTimeout(()=>{
@@ -352,6 +361,7 @@ export default class HomeScreen extends React.Component {
 
             console.log(deviceData);
             storage.save("boundDevices",deviceData);
+            Alert.alert(t("global.tips"),t('bluetooth.modifyDeviceNameSuccess'),[{ text:t("global.ok"),onPress:()=>{ } }]);
         });
 
     }
@@ -551,15 +561,6 @@ export default class HomeScreen extends React.Component {
     console.log("props", this.props.refreshing);
 
     this._getDevice()
-
-    this.refreshTimer && clearTimeout(this.refreshTimer);
-    this.refreshTimer = setTimeout(()=>{
-      if(this.scaning){
-        this.scaning = false
-        BluetoothManager.stopScan();
-      }
-      this.setState({refreshing: false})
-    }, 10000)
   };
 
   _renderDevice () {
@@ -639,7 +640,9 @@ export default class HomeScreen extends React.Component {
         })
         this.scan()
       } else {
-        BluetoothManager.disconnect();
+          if (BluetoothManager.peripheralId){
+              BluetoothManager.disconnect();
+          }
         this.setState({
           device: "",
           refreshing: false
