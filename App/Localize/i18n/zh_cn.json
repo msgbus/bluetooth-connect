@@ -24,7 +24,8 @@
     "noMorePost": "没有更多的消息",
     "openCase": "请打开充电盒然后添加您的设备",
     "connected": "蓝牙已连接",
-    "disconnected": "蓝牙连接断开。请下拉页面连接"
+    "disconnected": "蓝牙连接断开",
+    "pulltorefresh": "请下拉页面连接"
   },
   "settings": {
     "location": "位置",
