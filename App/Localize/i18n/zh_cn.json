@@ -69,7 +69,7 @@
     "inputBtName":"请输入新名称",
     "boundDevice":"绑定设备",
     "alreadyBoundDevice":"已绑定过该设备!",
-    "modifyDeviceNameSuccess":"设备修改成功!",
+    "modifyDeviceNameSuccess":"修改成功！请把耳机放回充电盒，并关上盒盖等待15秒后生效。",
     "boundSuccess":"绑定成功",
     "loading":"获取中...",
     "modifying":"修改中...",
