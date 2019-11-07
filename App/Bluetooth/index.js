@@ -401,7 +401,7 @@ export default class App extends Component {
             };
             
             for (var i = 0; i<deviceArr.length; i++) {
-                if ((this.state.deviceId == deviceArr[i].deviceId) && (this.state.deviceName == deviceArr[i].name)) {
+                if ((this.state.deviceId == deviceArr[i].deviceId) && ((this.state.deviceName == deviceArr[i].name) || (this.state.deviceName == (deviceArr[i].name) +  "-BLE"))) {
                     this.alert(t("bluetooth.alreadyBoundDevice"));
                     return
                 } else {
