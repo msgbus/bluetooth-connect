@@ -652,7 +652,12 @@ export default class HomeScreen extends React.Component {
   _getDevice() {
     storage.get("boundDevices").then(devices => {
       console.log("boundDevices", devices)
-      if (devices.deviceArray.length > 0) {
+      if (!devices ) {
+        this.setState({
+          device: "",
+          refreshing: false
+        })
+      } else if (devices.deviceArray.length > 0) {
         this.setState({
           device: devices.deviceArray[devices.currentIndex]
         })
