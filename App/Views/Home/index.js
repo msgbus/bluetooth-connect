@@ -656,8 +656,12 @@ export default class HomeScreen extends React.Component {
           if(state == 'PoweredOn'){
             this.scan();
           }
-        })
-        this.scan()
+        });
+        if (this.state.isConnected) {
+          this.checkBattery()
+        } else {
+          this.scan()
+        }
       } else {
           if (BluetoothManager.peripheralId){
               BluetoothManager.disconnect();
