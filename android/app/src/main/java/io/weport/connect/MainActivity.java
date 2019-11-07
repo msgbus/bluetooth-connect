@@ -1,4 +1,4 @@
-package net.wepor.connect;
+package io.weport.connect;
 
 import android.os.Build;
 import android.os.Bundle;

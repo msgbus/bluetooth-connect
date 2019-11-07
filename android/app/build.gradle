@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "net.wepor.connect"
+        applicationId "io.weport.connect"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
