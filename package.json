@@ -1,12 +1,12 @@
 {
-  "name": "WeportConnect",
-  "version": "0.6.0",
-  "description": "HiApp written with react-native.",
-  "author": "BelinChung",
-  "license": "MIT",
+  "name": "Weport",
+  "version": "1.0.0",
+  "description": "Weport Connect",
+  "author": "Weport",
+  "license": "Private",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BelinChung/react-native-hiapp.git"
+    "url": "https://github.com/msgbus/bluetooth-connect.git"
   },
   "scripts": {
     "android": "react-native run-android",
