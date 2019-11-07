@@ -120,7 +120,7 @@ export default class App extends Component {
                    BluetoothManager.stopScan();
                    this.setState({scaning:false});                   
                 }                
-            }, 2000)  // 5秒后停止搜索
+            }, 3000)  // 3秒后停止搜索
         }else {
             BluetoothManager.stopScan();
             this.setState({scaning:false});
@@ -361,7 +361,7 @@ export default class App extends Component {
 
     renderFooter=()=>{
         return(
-            <View style={{marginTop: 400, marginBottom:30}}>
+            <View style={{ marginBottom:30}}>
                 {
                     this.state.isConnected?
                 <View>
