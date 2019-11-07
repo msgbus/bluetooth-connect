@@ -68,7 +68,7 @@
     "inputBtName": "Please enter the new name",
     "boundDevice": "Bind this device",
     "alreadyBoundDevice": "This device has been bound",
-    "modifyDeviceNameSuccess": "The device name was successfully modified.",
+    "modifyDeviceNameSuccess": "Succeeded. Please put the earphones back to the charging case, close the charging case and wait 15 seconds",
     "boundSuccess": "Bound succeeded",
     "loading":"loading...",
     "modifying":"modifying...",
