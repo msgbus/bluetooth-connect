@@ -1,4 +1,4 @@
-package com.rn_hiapp;
+package net.wepor.connect;
 
 import android.app.Application;
 import android.content.Context;

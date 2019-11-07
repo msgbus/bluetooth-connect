@@ -1,4 +1,4 @@
-package com.rn_hiapp;
+package net.wepor.connect;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "RN_HiApp";
+    return "Weport";
   }
 
   @Override
