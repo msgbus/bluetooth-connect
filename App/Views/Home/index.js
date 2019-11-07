@@ -30,7 +30,9 @@ import BleModule from "../../Bluetooth/BleModule";
 import Image from 'react-native-scalable-image'
 
 import WEPORT_T1_IMG from '@assets/Weport-T1.jpg'
-import WEPORT_T1_OPEN_IMG from '@assets/Weport-T1-open.jpg'
+import WEPORT_T1_OPEN_IMG from '@assets/weport-t1-open-case.jpeg'
+import WEPORT_T1_PAIRING_IMG from '@assets/weport-t1-pairing.jpeg'
+import BLUETOOTH_PAIRING from '@assets/bluetooth-pair.png'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import {RRCLoading} from "react-native-overlayer/src/index";
 import Icon from "../../Components/Icon";
@@ -584,18 +586,23 @@ export default class HomeScreen extends React.Component {
       }
     } else {
       return (
-        <View style={viewStyles.container}>
-          <Image source={WEPORT_T1_OPEN_IMG} width={Dimensions.get('window').width}/>
-          <View style={viewStyles.tools}>
-            <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
-              <View style={viewStyles.toolItem}>
-                <Text>{ t('home.openCase') }</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+        this._renderGuide()
       )
     }
+  }
+
+  _renderGuide() {
+    return (
+      <View style={viewStyles.container}>
+        <Text style={viewStyles.toolItemText}>{ t('home.openCase') }</Text>
+        <Image source={WEPORT_T1_OPEN_IMG} width={Dimensions.get('window').width}/>
+        <Text style={[viewStyles.toolItemText, {marginTop: 15}]}>{ t('home.pressKey3s') }</Text>
+        <Image source={WEPORT_T1_PAIRING_IMG} width={Dimensions.get('window').width}/>
+        <Text style={[viewStyles.toolItemText, {marginTop: 15}]}>{ t('home.paringWithPhone') }</Text>
+        <Image source={BLUETOOTH_PAIRING} width={Dimensions.get('window').width}/>
+        <Text style={[viewStyles.toolItemText, {marginTop: 15}]}>{ t('home.addDevice') }</Text>
+      </View>
+    )
   }
 
   _renderConnectStatus() {
@@ -768,7 +775,7 @@ const viewStyles = StyleSheet.create({
   },
   toolItemText: {
     color: '#6d6d78',
-    fontSize: 12,
+    fontSize: 18,
     marginLeft: 3
   },
   linkText: {

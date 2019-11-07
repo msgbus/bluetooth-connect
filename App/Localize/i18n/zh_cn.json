@@ -22,7 +22,10 @@
     "publisher": "发布框",
     "publisherPlaceholder": "有什么好玩的要告诉大家",
     "noMorePost": "没有更多的消息",
-    "openCase": "请打开充电盒然后添加您的设备",
+    "openCase": "1. 请打开充电盒",
+    "pressKey3s": "2. 按住按钮 3秒 直到蓝灯闪烁",
+    "paringWithPhone": "3. 打开手机蓝牙设置配对",
+    "addDevice": "4. 然后在 \"设备\" 页面添加您的耳机",
     "connected": "蓝牙已连接",
     "disconnected": "蓝牙连接断开",
     "pulltorefresh": "请下拉页面连接"

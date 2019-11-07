@@ -22,7 +22,10 @@
     "publisher": "Publisher",
     "publisherPlaceholder": "What's new with you.",
     "noMorePost": "No Updated Post",
-    "openCase": "Please open the the charging case add your device",
+    "openCase": "1. Please open the the charging case",
+    "pressKey3s": "2. Press and hold the button for 3 seconds until the flash light turns BLUE",
+    "paringWithPhone": "3. Pair the earphone with your phone",
+    "addDevice": "4. Then add your earphone in \"Devices\" tab",
     "connected": "Connected",
     "disconnected": "Disconnected",
     "pulltorefresh": "Pull to connect"
