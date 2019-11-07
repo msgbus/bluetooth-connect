@@ -31,8 +31,9 @@ import Image from 'react-native-scalable-image'
 
 import WEPORT_T1_IMG from '@assets/Weport-T1.jpg'
 import WEPORT_T1_OPEN_IMG from '@assets/Weport-T1-open.jpg'
-import AwesomeIcon from 'react-native-vector-icons/Ionicons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import {RRCLoading} from "react-native-overlayer/src/index";
+import Icon from "../../Components/Icon";
 
 @connect(state => ({
   timeline: state.home.timeline
@@ -554,12 +555,14 @@ export default class HomeScreen extends React.Component {
 
     this.refreshTimer && clearTimeout(this.refreshTimer);
     this.refreshTimer = setTimeout(()=>{
+      console.log("home onRefresh timeout");
+      this.setState({refreshing: false});
+
       if(this.scaning){
-        this.scaning = false
+        this.scaning = false;
         BluetoothManager.stopScan();
       }
-      this.setState({refreshing: false})
-    }, 10000)
+    }, 1000)
   };
 
   _renderDevice () {
@@ -593,9 +596,25 @@ export default class HomeScreen extends React.Component {
         <TouchableOpacity style={[viewStyles.toolItemContainer, viewStyles.toolItemBorder]}>
           <View style={viewStyles.toolItem}>
             { this.state.isConnected ?
-              <Text style={{color: '#00f'}}> {t('home.connected')}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome name='bluetooth' size={18} color={'#00f'}/>
+                <Text> {t('home.connected')}</Text>
+              </View>
               :
-              <Text style={{color: '#f00'}}> {t('home.disconnected')} </Text> }
+              <View style={{flexDirection: 'column', alignItems:'center'}}>
+                { this.state.refreshing ?
+                  <View style={{flexDirection: 'row', alignItems:'center'}}>
+                    <FontAwesome name='bluetooth' size={18} color={'#000'}/>
+                    <Text> {t('home.disconnected')} </Text>
+                  </View>
+                  :
+                  <View style={{flexDirection: 'row', alignItems:'center'}}>
+                    <FontAwesome name={'arrow-down'} size={32}/>
+                    <Text> {t('home.pulltorefresh')} </Text>
+                  </View>
+                }
+              </View>
+            }
           </View>
         </TouchableOpacity>
       </View>
