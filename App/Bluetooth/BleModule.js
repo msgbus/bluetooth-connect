@@ -187,19 +187,25 @@ export default class BleModule{
      * 断开蓝牙
      * */
     disconnect(){
-      return new Promise( (resolve, reject) =>{
-        this.isConnecting = false;
-
-        this.manager.cancelDeviceConnection(this.peripheralId)
-                .then(res=>{
-                    console.log('disconnect success');
-                    resolve(res);
-                })
-                .catch(err=>{
-                    reject(err);
-                    console.log('disconnect fail',err);
-                })     
-        });
+      return new Promise( (resolve, reject) => {
+              this.isConnecting = false;
+              console.log("this.peripheralId:", this.peripheralId)
+              if (this.peripheralId != undefined) {
+                  this.manager.cancelDeviceConnection(this.peripheralId)
+                      .then(res => {
+                          console.log('disconnect success');
+                          resolve(res);
+                      })
+                      .catch(err => {
+                          reject(err);
+                          console.log('disconnect fail', err);
+                      })
+              }
+              else {
+                  throw new Error("this.peripheralId is undefined");
+              }
+          }
+      );
     }
 
     /**
