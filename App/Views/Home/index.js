@@ -311,7 +311,8 @@ export default class HomeScreen extends React.Component {
     if (bytesbuf.length == 6 && bytesbuf[0] == 200 && bytesbuf[1] == 2 ){
       if (bytesbuf[3] == 0) {
         this.setState({deviceName:this.newDeviceName})
-          this.boundDevice()
+          this.boundDevice();
+          Alert.alert(t("global.tips"),t('bluetooth.modifyDeviceNameSuccess'),[{ text:t("global.ok"),onPress:()=>{ } }]);
       } else {
         Alert.alert("修改失败");
       }
@@ -362,7 +363,6 @@ export default class HomeScreen extends React.Component {
 
             console.log(deviceData);
             storage.save("boundDevices",deviceData);
-            Alert.alert(t("global.tips"),t('bluetooth.modifyDeviceNameSuccess'),[{ text:t("global.ok"),onPress:()=>{ } }]);
         });
 
     }
