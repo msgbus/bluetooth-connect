@@ -308,13 +308,18 @@ export default class HomeScreen extends React.Component {
   }
 
   setBroadcastNameResp(bytesbuf){
+    RRCLoading.hide();
     if (bytesbuf.length == 6 && bytesbuf[0] == 200 && bytesbuf[1] == 2 ){
       if (bytesbuf[3] == 0) {
         this.setState({deviceName:this.newDeviceName})
           this.boundDevice();
-          Alert.alert(t("global.tips"),t('bluetooth.modifyDeviceNameSuccess'),[{ text:t("global.ok"),onPress:()=>{ } }]);
+          Alert.alert(t("global.tips"),t('bluetooth.modifyDeviceNameSuccess'),[{ text:t("global.ok"),
+              onPress:()=>{
+                  BluetoothManager.disconnect();
+                }
+          }]);
       } else {
-        Alert.alert("修改失败");
+          Alert.alert(t("global.tips"),t('bluetooth.modifyFail'),[{ text:t("global.ok"),onPress:()=>{ } }]);
       }
     }
   }
@@ -409,6 +414,9 @@ export default class HomeScreen extends React.Component {
 
   changeBroatcastName(name) {
     console.log("change name:",name)
+    const options = {  text: t('bluetooth.modifying') };
+    RRCLoading.setLoadingOptions(options);
+    RRCLoading.show();
     var bytes = new Array()
     bytes.push(200);
     bytes.push(1);
