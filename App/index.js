@@ -6,6 +6,7 @@ import Modals from '@Modals'
 import { Provider } from 'react-redux'
 import { setI18nConfig } from '@Localize'
 import * as RNLocalize from 'react-native-localize'
+import SplashScreen from 'react-native-splash-screen';
 
 import {
   SafeAreaView,
@@ -39,6 +40,10 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     RNLocalize.removeEventListener('change', this.handleLocalizationChange)
+  }
+
+  componentDidMount() {
+      SplashScreen.hide();
   }
 
   handleLocalizationChange = () => {

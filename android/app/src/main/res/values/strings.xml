@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Weport</string>
+    <color name="background">#FE8F01</color>
 </resources>

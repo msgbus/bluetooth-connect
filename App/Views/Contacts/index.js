@@ -66,7 +66,6 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        loading: true,
         currentDeviceIndex: -1,
         devices:[],
         refreshing: false,
@@ -75,9 +74,6 @@ class HomeScreen extends React.Component {
 
 
   componentDidMount() {
-      this.setState({
-          loading: true
-      });
       this.props.navigation.setParams({
           addDevice: () => this.addDevice()}
       );
@@ -97,19 +93,14 @@ class HomeScreen extends React.Component {
   render() {
     return (
         <View style={viewStyles.container}>
-            {this.state.loading ?
-                <View style={viewStyles.loadingBox}>
-                    <ActivityIndicator size="large"/>
-                </View>:
-                <FlatList
-                    renderItem={this.deviceItems}
-                    keyExtractor={item=>item.name}
-                    data={this.state.devices}
-                    ListFooterComponent={this.renderFooter}
-                    onRefresh={this._onRefresh.bind(this)}
-                    refreshing={this.state.refreshing}
-                />
-            }
+            <FlatList
+                renderItem={this.deviceItems}
+                keyExtractor={item=>item.name}
+                data={this.state.devices}
+                ListFooterComponent={this.renderFooter}
+                onRefresh={this._onRefresh.bind(this)}
+                refreshing={this.state.refreshing}
+            />
         </View>
     )
   }
@@ -220,10 +211,10 @@ class HomeScreen extends React.Component {
     async getBoundDevices() {
         await storage.get('boundDevices').then(value=>{
             this.setState({
-                loading: false
+                refreshing:false
             });
             console.log("get bound value:",value);
-            this.setState({devices : value.deviceArray, currentDeviceIndex:value.currentIndex, refreshing:false});
+            this.setState({devices : value.deviceArray, currentDeviceIndex:value.currentIndex});
             // console.log("state devices:",this.state.devices)
         });
     }
@@ -302,11 +293,6 @@ const viewStyles = StyleSheet.create({
   subtitleStyle: {
     fontSize: 14,
     color: '#858585'
-  },
-  loadingBox: {
-    height: 80,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
     buttonView: {
         marginRight:5,
