@@ -501,8 +501,10 @@ export default class HomeScreen extends React.Component {
             }
         >
           <View style={viewStyles.toolItem}>
-            <Text>{ this.state.deviceName }</Text>
-              <DialogInput
+            <Text style={{marginRight:10}}>{ this.state.deviceName }</Text>
+            { this.state.deviceName == "" ? <View/> : <FontAwesome name={'edit'}/> }
+
+            <DialogInput
                   isDialogVisible={this.state.isDialogVisible}
                   title={t("bluetooth.modifyBtName")}
                   message={t("bluetooth.inputBtName")}
@@ -609,7 +611,7 @@ export default class HomeScreen extends React.Component {
                   </View>
                   :
                   <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <FontAwesome name={'arrow-down'} size={32}/>
+                    <FontAwesome name={'arrow-down'} size={32} color={config.mainColor}/>
                     <Text> {t('home.pulltorefresh')} </Text>
                   </View>
                 }
