@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth</string>
+	<string>We need access to your bluetooth connection to connect Weport earphones and smartwatches</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Use Bluetooth to connect Weport earphones and smartwatches</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
