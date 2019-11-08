@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "net.wepor.connect",
+    package = "io.weport.connect",
 )
 
 android_resource(
     name = "res",
-    package = "net.wepor.connect",
+    package = "io.weport.connect",
     res = "src/main/res",
 )
 
