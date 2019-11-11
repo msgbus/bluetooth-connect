@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Weport
+
+  Created by yunba on 2019/11/11.
+  Copyright © 2019 Facebook. All rights reserved.
+*/
+NSBluetoothPeripheralUsageDescription = "我们需要访问蓝牙连接Weport耳机和智能手表";
+NSBluetoothPeripheralUsageDescription = "我们需要访问蓝牙连接Weport耳机和智能手表";

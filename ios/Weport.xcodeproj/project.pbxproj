@@ -18,6 +18,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* RN_HiAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RN_HiAppTests.m */; };
+		2EED3C962379651900F87C82 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2EED3C982379651900F87C82 /* InfoPlist.strings */; };
 		4529FA903B1E1CF38F97EBD7 /* libPods-WeportTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C44367C8E72105CF4F36A569 /* libPods-WeportTests.a */; };
 		57F8B57019441A1DB8A1D87B /* libPods-Weport-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C00BF58DFEB81C3ED5C66B4 /* libPods-Weport-tvOS.a */; };
 		796E667D233C93D40024AB73 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 796E667B233C93D40024AB73 /* iconfont.ttf */; };
@@ -63,6 +64,9 @@
 		2707BC01A3B84C5CD070AFB4 /* Pods-RN_HiApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RN_HiApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RN_HiApp-tvOS/Pods-RN_HiApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Weport-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weport-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Weport-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Weport-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EED3C93237964CB00F87C82 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		2EED3C972379651900F87C82 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		2EED3C992379652300F87C82 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3B5B797B38E6141389782A69 /* Pods-Weport.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weport.release.xcconfig"; path = "Target Support Files/Pods-Weport/Pods-Weport.release.xcconfig"; sourceTree = "<group>"; };
 		4DACCD38CCC8358529116475 /* Pods-Weport-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weport-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Weport-tvOSTests/Pods-Weport-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		53467FAE70715C4797B29782 /* Pods-Weport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weport.debug.xcconfig"; path = "Target Support Files/Pods-Weport/Pods-Weport.debug.xcconfig"; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				2EED3C982379651900F87C82 /* InfoPlist.strings */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -350,6 +355,7 @@
 				English,
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -377,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				796E667D233C93D40024AB73 /* iconfont.ttf in Resources */,
+				2EED3C962379651900F87C82 /* InfoPlist.strings in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -660,9 +667,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
+				2EED3C93237964CB00F87C82 /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
 			path = RN_HiApp;
+			sourceTree = "<group>";
+		};
+		2EED3C982379651900F87C82 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2EED3C972379651900F87C82 /* zh-Hans */,
+				2EED3C992379652300F87C82 /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
