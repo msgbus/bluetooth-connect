@@ -6,4 +6,4 @@
   Copyright © 2019 Facebook. All rights reserved.
 */
 NSBluetoothPeripheralUsageDescription = "We need access to your bluetooth connection to connect Weport earphones and smartwatches";
-NSBluetoothPeripheralUsageDescription = "We need access to your bluetooth connection to connect Weport earphones and smartwatches";
+NSBluetoothAlwaysUsageDescription = "We need access to your bluetooth connection to connect Weport earphones and smartwatches";
