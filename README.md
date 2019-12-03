@@ -1,12 +1,3 @@
-# react-native-hiapp
-[HiApp](https://github.com/BelinChung/HiApp) written in react-native.
-
-## Previews
-
-[![preview](https://i.imgur.com/lrKgIMO.png)](https://youtu.be/C2hX8ruKS9o) 
-
-Mirrors: [秒拍](http://t.cn/Aim7kcIf) 
-
 ## Requirements
 
 [React Native](http://facebook.github.io/react-native/docs/getting-started.html) `0.61.1` (follow iOS and Android guides)
@@ -18,8 +9,8 @@ Mirrors: [秒拍](http://t.cn/Aim7kcIf)
 1. **Clone the repo**
 
   ```
-  $ git clone https://github.com/BelinChung/react-native-hiapp.git
-  $ cd react-native-hiapp
+  $ git clone https://github.com/msgbus/bluetooth-connect.git
+  $ cd bluetooth-connect
   ```
 
 2. **Install dependencies** :
@@ -45,7 +36,3 @@ Mirrors: [秒拍](http://t.cn/Aim7kcIf)
   ```
   $ yarn android
   ```
-
-## License
-
-Copyright (c) 2016 - 2019 Belin Chung. MIT Licensed, see [LICENSE](https://github.com/BelinChung/react-native-hiapp/blob/master/LICENSE) for details.
